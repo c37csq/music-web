@@ -1,0 +1,293 @@
+.player_wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 0;
+  z-index: 999;
+  .audio_content {
+    height: 52px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: -52px;
+    margin: 0 auto;
+    background: #2C2C2C;
+    .play_content {
+      width: 1000px;
+      margin: 0 auto;
+      position: relative;
+      height: 100%;
+      // 左边按钮组
+      .left_controller {
+        float: left;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        width: 138px;
+        height: 100%;
+        .prev {
+          cursor: pointer;
+          transform: rotateZ(180deg);
+          opacity: 0.6;
+        }
+        .prev:hover {
+          opacity: 1;
+        }
+        .play {
+          cursor: pointer;
+          opacity: 0.8;
+          .img_play  {
+            display: inline-block;
+          }
+          .img_stop {
+            display: none;
+          }
+        }
+        .play:hover {
+          opacity: 1;
+        }
+        .next {
+          cursor: pointer;
+          opacity: 0.6;
+        }
+        .next:hover {
+          opacity: 1;
+        }
+      }
+      .main_controller {
+        float: left;
+        user-select: none;
+        margin-left: 28px;
+        font-size: 12px;
+        height: 52px;
+        width: 614px;
+        .music_controller {
+          color: #fff;
+          display: inline-block;
+          height: 52px;
+          width: 100%;
+          .music_info {
+            line-height: 28px;
+            height: 28px;
+            .title_info {
+              color: #e8e8e8;
+              cursor: pointer;
+            }
+            .title_info:hover {
+              text-decoration: underline;
+            }
+            .author_info {
+              margin-left: 15px;
+              color: #9b9b9b;
+            }
+          }
+          .process_time {
+            display: flex;
+            cursor: pointer;
+            justify-content: space-between;
+            align-items: center;
+            .process_wrapper {
+              .process {
+                width: 500px;
+                box-shadow: 1px 1px 1px #000;
+                background: #000;
+                height: 8px;
+                border-radius: 5px;
+                position: relative;
+                // 缓存条
+                .progress_buffered {
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  height: 8px;
+                  background: #c7c7c7;
+                  opacity: 0.4;
+                  z-index: 1;
+                  border-radius: 5px;
+                }
+                // 播放的进度条
+                .progress_played {
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  height: 8px;
+                  background: #e11b22;
+                  z-index: 2;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  // 拖动按钮
+                  .process_item {
+                    position: absolute;
+                    left: -4px;
+                    top: -4px;
+                    height: 16px;
+                    width: 16px;
+                    z-index: 3;
+                    border-radius: 50%;
+                    background: #fff;
+                    // 按钮中的红色点
+                    .process_item_inside {
+                      position: relative;
+                      background: #e11b22;
+                      top: 4px;
+                      left: 4px;
+                      height: 8px;
+                      width: 8px;
+                      z-index: 4;
+                      border-radius: 50%;
+                    }
+                  }
+                }
+              }
+            }
+            .time {
+              line-height: 12px;
+              display: inline-block;
+              margin-left: 14px;
+              width: 90px;
+              .current_time {
+                display: inline-block;
+                width: 40px;
+                text-align: left;
+              }
+              .total_time {
+                display: inline-block;
+                width: 40px;
+                text-align: right;
+                color: #6E6E6E;
+              }
+            }
+          }
+        }
+      }
+      // 收藏与分享按钮
+      .right_folder {
+        display: flex;
+        user-select: none;
+        float: left;
+        margin-left: 18px;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+        width: 60px;
+        .save_music {
+          width: 20px;
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        .save_music:hover {
+          opacity: 1;
+        }
+        .share_music {
+          width: 20px;
+          opacity: 0.7;
+          cursor: pointer;
+        }
+        .share_music:hover {
+          opacity: 1;
+        }
+      }
+      // 右侧音量调节、循环调节、歌单查看
+      .right_control {
+        position: relative;
+        user-select: none;
+        float: left;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-left: 25px;
+        height: 100%;
+        width: 100px;
+        .volume_controller {
+          position: absolute;
+          top: -128px;
+          width: 32px;
+          left: 0;
+          height: 128px;
+          background: #333;
+          z-index: 1;
+          .volume_progress {
+            position: absolute;
+            left: 14px;
+            width: 4px;
+            height: 100px;
+            top: 15px;
+            background: #000;
+            z-index: 9999;
+            border-radius: 5px;
+            cursor: pointer;
+            .volume_current {
+              position: absolute;
+              width: 4px;
+              bottom: 0;
+              background: #e11b22;
+              border-radius: 5px;
+              .volume_item {
+                position: absolute;
+                left: -4px;
+                bottom: -6px;
+                height: 12px;
+                width: 12px;
+                border-radius: 50%;
+                background: #fff;
+                cursor: pointer;
+                .volume_item_inside {
+                  position: relative;
+                  background: #e11b22;
+                  top: 4px;
+                  left: 4px;
+                  height: 4px;
+                  width: 4px;
+                  z-index: 2;
+                  border-radius: 50%;
+                }
+              }
+            }
+          }
+        }
+        .volume_img {
+          width: 20px;
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        .volume_img:hover {
+          opacity: 1;
+        }
+        .mode_img {
+          width: 20px;
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        .active {
+          display: none;
+        }
+        .mode_img:hover {
+          opacity: 1;
+        }
+        .list_img {
+          width: 20px;
+          cursor: pointer;
+          opacity: 0.7;
+        }
+        .list_img:hover {
+          opacity: 1;
+        }
+      }
+      .right_control::before {
+        width: 1px;
+        height: 24px;
+        background: #000;
+        box-shadow: 1px 1px 1px #000;
+        border-radius: 5px;
+        content: "";
+        position: absolute;
+        top: 14px;
+        left: -13px;
+        margin-bottom: 12px;
+      }
+    }
+  }
+}

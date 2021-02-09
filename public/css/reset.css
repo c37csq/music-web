@@ -1,0 +1,245 @@
+/* 重置CSS样式 */
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+img,
+embed,
+iframe,
+object,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+audio {
+  max-width: 100%;
+}
+
+iframe {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td,
+th {
+  padding: 0;
+  text-align: left;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  min-width: 1500px;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+
+/* 改变ant Modal弹窗头部颜色 */
+.ant-modal-content .ant-modal-header {
+  background: #2D2D2D !important;
+  cursor: move;
+}
+
+.ant-modal-content .ant-modal-header .ant-modal-title {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+/* 改变placeholder文字大小 */
+input::-webkit-input-placeholder{
+  font-size: 12px;
+}
+  
+input:-moz-placeholder{  
+  font-size: 12px;
+}
+  
+input::-moz-placeholder{
+  font-size: 12px;
+}
+
+input:-ms-input-placeholder{
+  font-size: 12px;
+}
+
+/* 设置弹框底部 */
+.login_footer {
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.login_footer .other_login {
+  color: #0c72c3;
+}
+
+.login_footer .regester {
+  color: #999999;
+}
+
+.regester_footer {
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.regester_footer .other_login {
+  color: #0c72c3;
+}
+
+/* 设置modal 遮罩层为透明 */
+.ant-modal-mask {
+  background: transparent !important;
+}
+
+#addMusic .ant-row {
+  margin: 18px 0;
+}
+
+/* 修改table样式 */
+.ant-table {
+  font-size: 13px !important;
+  color: #333333 !important;
+}
+
+/* 分页样式 */
+.ant-pagination-item-active a {
+  color: #ffffff !important;
+}
+
+.ant-pagination-item {
+  background: #ffffff !important;
+  border: 1px solid #ccc !important;
+  margin: 0 4px !important;
+}
+
+.ant-pagination-item-active {
+  background: #A2161B !important;
+  border-color: #A2161B !important;
+}
+
+.ant-pagination {
+  text-align: center !important;
+  user-select:  none !important;
+  margin: 40px 0 20px 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.ant-pagination-prev {
+  margin-right: 8px !important;
+  padding: 0 4px;
+  border: 1px solid #ccc !important;
+}
+
+.ant-pagination-prev a {
+  font-size: 12px !important;
+}
+
+.ant-pagination-next {
+  margin-left: 8px !important;
+  padding: 0 4px;
+  border: 1px solid #ccc !important;
+}
+
+.ant-pagination-next a {
+  font-size: 12px !important;
+}
+
+/* 超出打点 */
+.text_hidden {
+  white-space: nowrap;
+  text-overflow: ellipsis;    
+  overflow: hidden;
+}
+
+/* 自动换行 */
+.word_wrap {
+  word-wrap: break-word;
+  word-break: normal; 
+}
+
+/* textarea样式 */
+.textarea .ant-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.textarea .ant-input:hover {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.textarea .ant-input {
+  border: 1px solid #999999 !important;
+}
+
+.ant-input-textarea.ant-input-textarea-show-count::after {
+  padding-right: 60px;
+  margin-top: 15px;
+}

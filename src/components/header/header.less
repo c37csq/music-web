@@ -1,0 +1,76 @@
+.Header_Container {
+  background: #242424;
+  height: 70px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  .Header_Content_Wrapper {
+    width: 1100px;
+    height: 100%;
+    .Header_Title_Wrapper {
+      float: left;
+      width: 177px;
+      padding-left: 20px;
+      height: 100%;
+      color: #DCDCDC;
+      line-height: 70px;
+      font-size: 22px;
+      background: #242424;
+      cursor: pointer;
+    }
+    .Header_Menu_Wrapper {
+      float: left;
+      height: 100%;
+      .ant-menu {
+        height: 100%;
+        border-bottom: #242424;
+        background: #242424;
+        .ant-menu-item {
+          height: 100%;
+          margin: 0;
+          padding: 0 20px;
+          line-height: 70px;
+          font-size: 14px;
+          user-select: none;
+          color: #ACACAC;
+        }
+        .ant-menu-item-selected {
+          background: #000000;
+          color: #FFFFFF;
+        }
+        .ant-menu-item-active {
+          color: #FFFFFF;
+          border-bottom: none;
+          background: #000000;
+        }
+      }
+    }
+    .Header_Input_Wrapper {
+      float: right;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-right: 70px;
+    }
+    .Header_Avatar_Wrapper {
+      float: right;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-right: 42px;
+      .login_button {
+        height: 100%;
+        p {
+          height: 100%;
+          cursor: pointer;
+          line-height: 70px;
+          color: #cccccc;
+        }
+        p:hover {
+          text-decoration: underline;
+          color: #FFFFFF;
+        }
+      }
+    }
+  }
+}
