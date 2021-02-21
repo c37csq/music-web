@@ -63,3 +63,6 @@ export const deleteComment = (params: DELETE_COMMENT) => ajax(BASE + '/deleteCom
 
 // 收藏歌曲
 export const saveMusic = (params: SAVE_MUSIC) => ajax(BASE + '/saveMusic', params, 'POST');
+
+// 获取同类歌曲
+export const getSameListById = (params: { type: number[], song_id: number }) => ajax(BASE + '/getSameListById', params, 'POST');

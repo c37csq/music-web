@@ -48,3 +48,12 @@ export function stopBubble (e: any) {
     event.cancelBubble = true
   }
 }
+
+// 重置滚动条
+export function resetScroll () {
+  if (document.documentElement) {
+    document.documentElement.scrollTop = 0;
+  } else if (document.body) {
+    document.body.scrollTop = 0;
+  }
+}

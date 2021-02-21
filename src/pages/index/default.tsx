@@ -85,7 +85,7 @@ class Default extends React.Component<{}, {}> {
       <GlobalContext.Provider
         value={globalData}>
         <Layout className="layout">
-          <Header hideMusicListAndVolume={this.hideMusicListAndVolume}/>
+          <Header hideMusicListAndVolume={this.hideMusicListAndVolume} />
           <Content>
             <div onClick={this.hideMusicListAndVolume} className="Container">
               <div className="Component-Wrapper">
@@ -100,7 +100,7 @@ class Default extends React.Component<{}, {}> {
               </div>
             </div>
           </Content>
-          <Footer hideMusicListAndVolume={this.hideMusicListAndVolume}/>
+          <Footer hideMusicListAndVolume={this.hideMusicListAndVolume} />
           <Player ref={this.player} />
         </Layout>
       </GlobalContext.Provider>

@@ -111,7 +111,7 @@ const CommentList = (props: IProps, ref: any) => {
     const res = await goodToPerson(params);
     if ((res as any).status === 200) {
       message.info('点赞成功！');
-      getList();
+      getList(song_id);
     }
   }
 
@@ -126,7 +126,7 @@ const CommentList = (props: IProps, ref: any) => {
     const res = await disGoodToPerson(params);
     if ((res as any).status === 200) {
       message.info('取消点赞成功！');
-      getList();
+      getList(song_id);
     }
   }
 
@@ -144,7 +144,7 @@ const CommentList = (props: IProps, ref: any) => {
     const res = await goodToPerson(params);
     if ((res as any).status === 200) {
       message.info('点赞成功！');
-      getList();
+      getList(song_id);
     }
   }
 
@@ -159,7 +159,7 @@ const CommentList = (props: IProps, ref: any) => {
     const res = await disGoodToPerson(params);
     if ((res as any).status === 200) {
       message.info('取消点赞成功！');
-      getList();
+      getList(song_id);
     }
   }
 
@@ -182,7 +182,7 @@ const CommentList = (props: IProps, ref: any) => {
     const res = await deleteComment(params);
     if ((res as any).status === 200) {
       message.info('删除成功！');
-      getList();
+      getList(song_id);
     }
   }
 
@@ -196,7 +196,7 @@ const CommentList = (props: IProps, ref: any) => {
     const res = await deleteComment(params);
     if ((res as any).status === 200) {
       message.info('删除成功！');
-      getList();
+      getList(song_id);
     }
   }
 

@@ -1,6 +1,6 @@
 import './Comment.less';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Input, Avatar, message } from 'antd';
+import { Button, Input, Avatar, message, Anchor } from 'antd';
 import store from '../../store';
 import Login from '../Login/Login';
 import { relyComment, submitComment } from '../../api';
@@ -17,6 +17,7 @@ interface IProps extends RouteComponentProps {
 }
 
 const { TextArea } = Input;
+
 
 const Comment = (props: IProps, ref: any) => {
 
@@ -78,7 +79,7 @@ const Comment = (props: IProps, ref: any) => {
           const res = await relyComment(params);
           if ((res as any).status === 200) {
             message.info('评论成功！');
-            getList();
+            getList(song_id);
             setValue('');
           }
         } else {
@@ -94,7 +95,7 @@ const Comment = (props: IProps, ref: any) => {
           const res = await submitComment(params);
           if ((res as any).status === 200) {
             message.info('评论成功！');
-            getList();
+            getList(song_id);
             setValue('');
           }
         }
@@ -134,7 +135,7 @@ const Comment = (props: IProps, ref: any) => {
       <Login closeModal={closeModal} visible={visible} />
       <div className="comment_content">
         <div style={{ display: `${isShowHeader ? 'inline-block' : 'none'}` }} className="comment_header">
-          <div className="title">
+          <div id="comment_title" className="title">
             评论
           </div>
           <div className="count">
