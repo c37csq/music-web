@@ -6,7 +6,6 @@ import './AddMusicForm.less'
 import { ADDMUSIC_FORM, SONG_TYPES, delAvatarResponse, imgItem, RESPONSE_INFO } from '../../../src/global';
 import { BASE_IMG, BASE_VIDEO_URL, deleteVideo, shareSongs } from '../../api/index';
 import store from '../../store/index';
-import { changeRoute, setUserToken } from '../../store/actionCreators';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { getSongTypes } from '../../api/index';
 

@@ -1,4 +1,4 @@
-import { CHANGE_ROUTE, DELETE_MUSIC, CHANGE_LOGIN_STATUS, action, SET_USER_TOKEN, ADD_MUSIC_LIST, SET_CURRENT_MUSIC } from './actionTypes';
+import { CLEAR_MUSIC, CHANGE_ROUTE, DELETE_MUSIC, CHANGE_LOGIN_STATUS, action, SET_USER_TOKEN, ADD_MUSIC_LIST, SET_CURRENT_MUSIC } from './actionTypes';
 
 // 改变全局路由
 export const changeRoute = (value: any): action => ({
@@ -33,6 +33,12 @@ export const setCurrentMusic = (value: any): action => ({
 // 从音乐列表里删除一个数据
 export const deleteMusicFromMusicList = (value: any): action => ({
   type: DELETE_MUSIC,
+  value
+})
+
+// 清空歌曲列表
+export const clearMusicList = (value: any): action => ({
+  type: CLEAR_MUSIC,
   value
 })
 

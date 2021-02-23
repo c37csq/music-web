@@ -9,7 +9,6 @@ import CommentList from '../../components/CommentList/CommentList';
 import store from '../../store';
 import { GlobalContext } from '../index/default';
 import { addMusicList } from '../../store/actionCreators';
-import {resetScroll} from '../../utils/utils';
 
 interface IProps { }
 
@@ -129,7 +128,8 @@ const SongDetail = (props: IProps, ref: any) => {
   }
 
   // 去歌曲详情页面
-  const goDetail = (record: SONG) => {
+  const goDetail = (e: any, record: SONG) => {
+    e.stopPropagation();
     if (record.id === id) return;
     (props as any).history.replace(`/songdetail?id=${record.id}`);
     setId(record.id);
@@ -269,7 +269,7 @@ const SongDetail = (props: IProps, ref: any) => {
                               return (
                                 <div key={item.id} className="bottom_item">
                                   <div className="left">
-                                    <div className="item_name" onClick={() => goDetail(item)}>{item.song_name}</div>
+                                    <div className="item_name" onClick={(e) => goDetail(e, item)}>{item.song_name}</div>
                                     <div className="item_singer">{item.song_singer}</div>
                                   </div>
                                   <div className="right">

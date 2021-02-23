@@ -19,8 +19,11 @@ const { Content } = Layout;
 
 interface IPlayerRef {
   onPause: Function,
-  onPlay: Function
+  onPlay: Function,
+  hideMusicList: Function,
+  hideVolume: Function
 }
+
 export const GlobalContext = React.createContext({});
 
 class Default extends React.Component<{}, {}> {
@@ -91,7 +94,7 @@ class Default extends React.Component<{}, {}> {
               <div className="Component-Wrapper">
                 <Switch>
                   <Redirect exact from="/" to="/home" />
-                  <Route path="/home" component={Home} />
+                  <Route path="/home" exact component={Home} />
                   <Route path="/addmusic" component={AddMusic} />
                   <Route path="/myspace" component={MySpace} />
                   <Route path="/songdetail" component={SongDetail} />

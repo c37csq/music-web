@@ -4,13 +4,15 @@ import { Tooltip } from 'antd';
 import store from '../../store';
 import { SONG } from '../../global';
 import { downSong } from '../../api';
-import { setCurrentMusic, deleteMusicFromMusicList } from '../../store/actionCreators';
+import { setCurrentMusic, deleteMusicFromMusicList, clearMusicList } from '../../store/actionCreators';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-interface IProps {
+interface IProps extends RouteComponentProps {
   toggleMusicList: (event: any) => void,
   onPlay: Function,
   nextMusic: Function,
-  onPause: Function
+  onPause: Function,
+  resetProcess: Function
 };
 
 const MusicList = (props: IProps, ref: any) => {
@@ -30,7 +32,7 @@ const MusicList = (props: IProps, ref: any) => {
   // 滚动条列表容器
   const barWrapperRef = useRef<HTMLDivElement>(null);
 
-  const { toggleMusicList, onPlay, nextMusic, onPause } = props;
+  const { toggleMusicList, onPlay, nextMusic, onPause, resetProcess } = props;
 
   useEffect(() => {
     // other code
@@ -276,6 +278,36 @@ const MusicList = (props: IProps, ref: any) => {
     setCurrentMusicPosition();
   }
 
+  // 清除歌曲
+  const clearMusic = () => {
+    // 从播放列表删除当前的音乐
+    const clearMusicAction = clearMusicList([]);
+    const currentMusicAction = setCurrentMusic({
+      id: -1,
+      song_name: "",
+      song_singer: "",
+      song_url: "",
+      song_introduce: "",
+      song_album: "",
+      create_user: "",
+      create_id: "",
+      create_time: "",
+      song_hot: 0,
+      type: [],
+      likePersons: []
+    });
+    store.dispatch(currentMusicAction);
+    store.dispatch(clearMusicAction);
+    resetProcess();
+    onPause();
+  }
+
+  // 去详情
+  const goDetail = (e: any, record: SONG) => {
+    e.stopPropagation();
+    (props as any).history.replace(`/songdetail?id=${record.id}`);
+  }
+
   return (
     <div className="musicList" ref={musicListRef}>
       <div className="music-list-head">
@@ -295,7 +327,7 @@ const MusicList = (props: IProps, ref: any) => {
           <div className="delete_all">
             <img className="delete_all_img" src={require('../../assets/images/delete.png').default} alt="删除" />
           </div>
-          <div className="music-list-common-text">清除</div>
+          <div className="music-list-common-text" onClick={clearMusic}>清除</div>
         </div>
         <div className="music-list-head-close" onClick={toggleMusicList}>
           <img className="music-list-head-close-img" src={require('../../assets/images/close.png').default} alt="关闭" />
@@ -362,7 +394,7 @@ const MusicList = (props: IProps, ref: any) => {
                             </Tooltip>
                           </div>
                           <div className="col music-list-li-col-6">
-                            <div>
+                            <div onClick={(e) => goDetail(e, item)}>
                               <Tooltip title="查看来源">
                                 <img src={require('../../assets/images/src.png').default} alt="查看来源" />
                               </Tooltip>
@@ -384,4 +416,4 @@ const MusicList = (props: IProps, ref: any) => {
   )
 }
 
-export default MusicList;
+export default withRouter(MusicList);

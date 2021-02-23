@@ -14,7 +14,7 @@ const Player = (props: IProps, ref: any) => {
   // 播放状态  一开始是暂停的
   const [status, setStatus] = useState(false);
   // 当前播放的音乐
-  const [currentMusic, setCurrentSong] = useState({
+  const [currentMusic, setCurrentSong] = useState<SONG>({
     id: -1,
     song_name: "",
     song_singer: "",
@@ -25,7 +25,8 @@ const Player = (props: IProps, ref: any) => {
     create_id: "",
     create_time: "",
     song_hot: 0,
-    type: []
+    type: [],
+    likePersons: []
   });
   // 当前播放时间
   const [currentTime, setCurrentTime] = useState("00:00");
@@ -72,6 +73,7 @@ const Player = (props: IProps, ref: any) => {
 
   // 挂载后
   useEffect(() => {
+    // other code
     const audio = audioRef.current;
     // 解决音量拖动问题
     bindEvent();
@@ -183,6 +185,7 @@ const Player = (props: IProps, ref: any) => {
         audio.removeEventListener('ended', endedPlayMusic, false);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processItemMove, playMode, status, volumeControl]);
 
   useEffect(() => {
@@ -695,7 +698,12 @@ const Player = (props: IProps, ref: any) => {
           {/* 歌单组件 */}
           {
             isMusicListShow && (
-              <MusicList onPause={onPause} nextMusic={nextMusic} onPlay={onPlay} toggleMusicList={toggleMusicList} />
+              <MusicList 
+                resetProcess={resetProcess} 
+                onPause={onPause} 
+                nextMusic={nextMusic} 
+                onPlay={onPlay} 
+                toggleMusicList={toggleMusicList} />
             )
           }
           {/* 播放器基础组件 */}

@@ -66,3 +66,6 @@ export const saveMusic = (params: SAVE_MUSIC) => ajax(BASE + '/saveMusic', param
 
 // 获取同类歌曲
 export const getSameListById = (params: { type: number[], song_id: number }) => ajax(BASE + '/getSameListById', params, 'POST');
+
+// 通过id获取列表
+export const getDynamicList = (params: { id: number }) => ajax(BASE + '/getDynamicList', params);

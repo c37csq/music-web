@@ -22,4 +22,7 @@ export const SET_CURRENT_MUSIC = 'setCurrentMusic';
 // 删除一条音乐
 export const DELETE_MUSIC = 'deleteMusic';
 
+// 清空歌曲
+export const CLEAR_MUSIC = 'clearMusic';
+
 

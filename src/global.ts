@@ -103,7 +103,7 @@ export type SONG = {
   create_time: string,
   song_hot: number,
   type: SONG_TYPE[],
-  likePersons: LIKE_PERSONS_ITEM[] |[]
+  likePersons: LIKE_PERSONS_ITEM[] | []
 }
 
 export type LIKE_PERSONS_ITEM = {

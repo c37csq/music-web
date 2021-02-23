@@ -1,5 +1,5 @@
 import { SONG } from '../global';
-import { CHANGE_ROUTE, CHANGE_LOGIN_STATUS, action, SET_USER_TOKEN, ADD_MUSIC_LIST, SET_CURRENT_MUSIC, DELETE_MUSIC } from './actionTypes';
+import { CHANGE_ROUTE, CHANGE_LOGIN_STATUS, action, SET_USER_TOKEN, ADD_MUSIC_LIST, SET_CURRENT_MUSIC, DELETE_MUSIC, CLEAR_MUSIC } from './actionTypes';
 
 // 从sessionStorage取出 route 的值
 let routeStorage = sessionStorage.getItem('route');
@@ -40,7 +40,8 @@ let currentMusic = currentMusicStorage ? JSON.parse(currentMusicStorage) : {
   create_id: "",
   create_time: "",
   song_hot: 0,
-  type: []
+  type: [],
+  likePersons: []
 };
 
 const initState = {
@@ -83,6 +84,10 @@ const reducer = (state = initState, action: action) => {  //就是一个方法�
     case DELETE_MUSIC:
       const index = newState.musicList.findIndex((item: SONG) => item.id === action.value.id);
       newState.musicList.splice(index, 1);
+      sessionStorage.setItem("musicList", JSON.stringify(newState.musicList));
+      return newState;
+    case CLEAR_MUSIC:
+      newState.musicList = action.value;
       sessionStorage.setItem("musicList", JSON.stringify(newState.musicList));
       return newState;
   }
