@@ -6,6 +6,7 @@ import { imgItem, delAvatarResponse } from '../../../src/global';
 import { BASE_AVATAR_URL, BASE_IMG } from '../../api/index';
 import { getBase64 } from '../../utils/utils';
 import { deleteAvatar } from '../../api/index';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface IState {
   loading: boolean,
@@ -112,7 +113,10 @@ class UploadAvatar extends React.Component<{}, IState> {
             {fileList.length >= 1 ? null : uploadButton}
           </Upload>
         </ImgCrop>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <Modal
+          closeIcon={<CloseOutlined style={{color: '#ffffff'}}/>}
+          visible={previewVisible} 
+          footer={null} onCancel={this.handleCancel}>
           <img alt="你上传的图片" style={{ width: '100%' }} src={previewImage} />
         </Modal>
       </div>

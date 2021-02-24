@@ -41,12 +41,24 @@ class Default extends React.Component<{}, {}> {
     const musicList = store.getState().musicList;
     if (musicList.find((item: SONG) => item.id === data.id)) {
       // 设置当前正在播放的音乐
-      const currentMusicAction = setCurrentMusic(data);
+      const currentMusicAction = setCurrentMusic({
+        id: data.id,
+        song_url: data.song_url,
+        song_name: data.song_name,
+        song_singer: data.song_singer,
+        song_hot: data.song_hot
+      });
       store.dispatch(currentMusicAction);
       // 不需要添加歌曲了
     } else {
       // 向store中的音乐列表添加一个音乐
-      const action = addMusicList(data);
+      const action = addMusicList({
+        id: data.id,
+        song_url: data.song_url,
+        song_name: data.song_name,
+        song_singer: data.song_singer,
+        song_hot: data.song_hot
+      });
       store.dispatch(action);
       // 设置当前正在播放的音乐
       const currentMusicAction = setCurrentMusic(data);

@@ -14,19 +14,12 @@ const Player = (props: IProps, ref: any) => {
   // 播放状态  一开始是暂停的
   const [status, setStatus] = useState(false);
   // 当前播放的音乐
-  const [currentMusic, setCurrentSong] = useState<SONG>({
+  const [currentMusic, setCurrentSong] = useState<any>({
     id: -1,
     song_name: "",
     song_singer: "",
     song_url: "",
-    song_introduce: "",
-    song_album: "",
-    create_user: "",
-    create_id: "",
-    create_time: "",
-    song_hot: 0,
-    type: [],
-    likePersons: []
+    song_hot: 0
   });
   // 当前播放时间
   const [currentTime, setCurrentTime] = useState("00:00");
@@ -554,7 +547,13 @@ const Player = (props: IProps, ref: any) => {
   // 设置当前正在播放的音乐
   const setStoreMusic = (data: SONG) => {
     // 设置当前正在播放的音乐
-    const currentMusicAction = setCurrentMusic(data);
+    const currentMusicAction = setCurrentMusic({
+      id: data.id,
+      song_name: data.song_name,
+      song_singer: data.song_singer,
+      song_url: data.song_url,
+      song_hot: data.song_hot,
+    });
     store.dispatch(currentMusicAction);
   }
 

@@ -107,7 +107,13 @@ class Home extends React.Component<IProps, IState> {
     const { currentMusic } = this.state;
     if ((currentMusic as SONG).id === record.id) return;
     // 播放音乐
-    obj.playMusic(record);
+    obj.playMusic({
+      id: record.id,
+      song_name: record.song_name,
+      song_url: record.song_url,
+      song_hot: record.song_hot,
+      song_singer: record.song_singer,
+    });
     // 增加该条歌曲热度
     const res = await addHot({ song_id: record.id, song_hot: record.song_hot });
   }
@@ -138,7 +144,13 @@ class Home extends React.Component<IProps, IState> {
     if (musicList.find((item: SONG) => item.id === record.id)) {
       return message.success('歌曲已经在列表！');
     } else {
-      const action = addMusicList(record);
+      const action = addMusicList({
+        id: record.id,
+        song_name: record.song_name,
+        song_url: record.song_url,
+        song_hot: record.song_hot,
+        song_singer: record.song_singer,
+      });
       store.dispatch(action);
       // 增加该条歌曲热度
       const res = await addHot({ song_id: record.id, song_hot: record.song_hot });

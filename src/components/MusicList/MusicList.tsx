@@ -231,7 +231,13 @@ const MusicList = (props: IProps, ref: any) => {
   // 播放音乐
   const playMusic = (e: any, item: SONG) => {
     // 设置当前正在播放的音乐
-    const currentMusicAction = setCurrentMusic(item);
+    const currentMusicAction = setCurrentMusic({
+      id: item.id,
+      song_name: item.song_name,
+      song_singer: item.song_singer,
+      song_url: item.song_url,
+      song_hot: item.song_hot
+    });
     store.dispatch(currentMusicAction);
     onPlay();
   }
@@ -262,13 +268,7 @@ const MusicList = (props: IProps, ref: any) => {
         song_name: "",
         song_singer: "",
         song_url: "",
-        song_introduce: "",
-        song_album: "",
-        create_user: "",
-        create_id: "",
-        create_time: "",
         song_hot: "",
-        type: []
       });
       store.dispatch(currentMusicAction);
       onPause();
@@ -287,14 +287,7 @@ const MusicList = (props: IProps, ref: any) => {
       song_name: "",
       song_singer: "",
       song_url: "",
-      song_introduce: "",
-      song_album: "",
-      create_user: "",
-      create_id: "",
-      create_time: "",
       song_hot: 0,
-      type: [],
-      likePersons: []
     });
     store.dispatch(currentMusicAction);
     store.dispatch(clearMusicAction);

@@ -34,14 +34,7 @@ let currentMusic = currentMusicStorage ? JSON.parse(currentMusicStorage) : {
   song_name: "",
   song_singer: "",
   song_url: "",
-  song_introduce: "",
-  song_album: "",
-  create_user: "",
-  create_id: "",
-  create_time: "",
   song_hot: 0,
-  type: [],
-  likePersons: []
 };
 
 const initState = {

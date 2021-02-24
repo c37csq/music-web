@@ -6,6 +6,7 @@ import RegesterForm from '../RegesterForm/RegesterForm';
 import store from '../../store/index';
 import { changeLoginStatus } from '../../store/actionCreators';
 import ModalDrag from '../ModalDrag/ModalDrag';
+import { CloseOutlined } from '@ant-design/icons';
 
 interface IState {
   status: string,
@@ -131,6 +132,7 @@ class Login extends React.Component<IProps, IState> {
     const title = <ModalDrag title={this.getTitle(status)} />
     return (
       <Modal
+        closeIcon={<CloseOutlined style={{color: '#ffffff'}}/>}
         title={title}
         visible={visible}
         onCancel={() => this.closeModal(status)}
