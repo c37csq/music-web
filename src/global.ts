@@ -72,7 +72,7 @@ export type AVATAR_PROP = {
   avatar_url: string
 }
 
-export interface SONG_ITEM  {
+export interface SONG_ITEM {
   id: number,
   name: string
 }
@@ -224,7 +224,7 @@ export type RELY_COMMENT = {
   relyPerson: string
 }
 
-// 点赞需要的参数类型
+// 点赞评论需要的参数类型
 export type GOOD = {
   type: string,
   username: string,
@@ -235,11 +235,30 @@ export type GOOD = {
   likeCounts: number
 }
 
+// 点赞动态需要的参数类型
+export type GOOD_DYNAMIC = {
+  type: string,
+  username: string,
+  user_id: number,
+  toPersonName: string,
+  toPersonId: number,
+  dynamicId: number,
+  likeCounts: number
+}
+
 // 取消点赞参数类型
 export type DISGOOD = {
   type: string,
   user_id: number,
   commentId: number,
+  likeCounts: number
+}
+
+// 取消动态点赞
+export type DISGOOD_DYNAMIC = {
+  type: string,
+  user_id: number,
+  dynamicId: number,
   likeCounts: number
 }
 
@@ -254,4 +273,24 @@ export type DELETE_COMMENT = {
 export type SAVE_MUSIC = {
   user_id: number,
   song_id: number
+}
+
+// 选择的音乐
+export type SELECT_MUSIC = {
+  id: number,
+  song_name: string,
+  song_singer: string,
+  song_hot: number,
+  song_url: string
+}
+
+// 添加动态参数类型
+export type ADD_DYNAMIC = {
+  likeCounts: number,
+  avatar_url: string,
+  add_time: number,
+  content: string,
+  song_id: number,
+  user_id: number,
+  username: string
 }

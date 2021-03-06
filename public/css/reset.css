@@ -91,6 +91,10 @@ html, body {
   overflow-y: auto !important;
 }
 
+.ant-modal-wrap {
+  overflow-y: hidden !important;
+}
+
 #root {
   height: 100%;
   width: 100%;
@@ -231,6 +235,12 @@ input:-ms-input-placeholder{
 }
 
 .textarea .ant-input:hover {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ant-input-affix-wrapper {
+  border: 1px solid #999999 !important;
   outline: none !important;
   box-shadow: none !important;
 }

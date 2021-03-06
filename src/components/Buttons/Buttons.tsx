@@ -6,6 +6,7 @@ import { LIKE_PERSONS_ITEM, RESPONSE_INFO, SONG } from '../../global';
 import { message } from 'antd';
 import Login from '../Login/Login';
 import { addMusicList } from '../../store/actionCreators';
+import ShareMusic from '../ShareMusic/ShareMusic';
 
 interface IProps {
   song_id: number,
@@ -22,6 +23,16 @@ const Buttons = (props: IProps, ref: any) => {
   const { song_id, song_detail, getSongDetail, obj } = props;
   // visible
   const [visible, setVisible] = useState(false);
+
+  const [shareVisible, setShareVisible] = useState(false);
+
+  const [shareCurrentMusic, setShareCurrentMusic] = useState({
+    id: -1,
+    song_name: "",
+    song_singer: "",
+    song_url: "",
+    song_hot: 0
+  })
 
   // 收藏歌曲
   const save = async () => {
@@ -74,6 +85,7 @@ const Buttons = (props: IProps, ref: any) => {
     obj.playMusic(song_detail);
     // 增加该条歌曲热度
     const res = await addHot({ song_id: song_detail.id, song_hot: song_detail.song_hot });
+    console.log(res);
   }
 
   // 下载歌曲
@@ -118,9 +130,45 @@ const Buttons = (props: IProps, ref: any) => {
     }
   }
 
+  // 显示分享弹框
+  const showShareModal = () => {
+    setShareVisible(true);
+  }
+
+  // 分享音乐
+  const shareMusic = async () => {
+    const { username, id, avatar_url } = store.getState().userInfo;
+    if (username && avatar_url && id) {
+      showShareModal();
+      const song = {
+        id: song_detail.id,
+        song_name: song_detail.song_name,
+        song_singer: song_detail.song_singer,
+        song_url: song_detail.song_url,
+        song_hot: song_detail.song_hot
+      }
+      setShareCurrentMusic(song);
+    } else {
+      showModal();
+    }
+  }
+
+  // 关闭分享弹窗
+  const closeShareModal = () => {
+    setShareVisible(false);
+  }
+  
+  const { id } = store.getState().userInfo;
+
   return (
     <div className="buttons">
       <Login closeModal={closeModal} visible={visible} />
+      <ShareMusic
+        shareMusic={shareCurrentMusic}
+        userId={id}
+        closeModal={closeShareModal}
+        title="分享音乐"
+        visible={shareVisible} />
       <div className="play">
         <div className="play_music" onClick={() => playMusic(obj, song_detail)}>
           <div className="play_music_img">
@@ -149,7 +197,7 @@ const Buttons = (props: IProps, ref: any) => {
             )
         }
       </div>
-      <div className="common">
+      <div className="common" onClick={shareMusic}>
         <div className="save_content">
           <div className="save_content_text">
             分 享

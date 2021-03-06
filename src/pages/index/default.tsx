@@ -46,7 +46,8 @@ class Default extends React.Component<{}, {}> {
         song_url: data.song_url,
         song_name: data.song_name,
         song_singer: data.song_singer,
-        song_hot: data.song_hot
+        song_hot: data.song_hot,
+        song_album: data.song_album
       });
       store.dispatch(currentMusicAction);
       // 不需要添加歌曲了
@@ -57,7 +58,8 @@ class Default extends React.Component<{}, {}> {
         song_url: data.song_url,
         song_name: data.song_name,
         song_singer: data.song_singer,
-        song_hot: data.song_hot
+        song_hot: data.song_hot,
+        song_album: data.song_album
       });
       store.dispatch(action);
       // 设置当前正在播放的音乐

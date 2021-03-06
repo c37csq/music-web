@@ -1,9 +1,9 @@
 import './MusicList.less';
 import React, { useEffect, useRef } from 'react';
-import { Tooltip } from 'antd';
+import { message, Tooltip } from 'antd';
 import store from '../../store';
-import { SONG } from '../../global';
-import { downSong } from '../../api';
+import { RESPONSE_INFO, SONG } from '../../global';
+import { downSong, saveMusic } from '../../api';
 import { setCurrentMusic, deleteMusicFromMusicList, clearMusicList } from '../../store/actionCreators';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -12,7 +12,8 @@ interface IProps extends RouteComponentProps {
   onPlay: Function,
   nextMusic: Function,
   onPause: Function,
-  resetProcess: Function
+  resetProcess: Function,
+  showModal: Function
 };
 
 const MusicList = (props: IProps, ref: any) => {
@@ -32,7 +33,7 @@ const MusicList = (props: IProps, ref: any) => {
   // 滚动条列表容器
   const barWrapperRef = useRef<HTMLDivElement>(null);
 
-  const { toggleMusicList, onPlay, nextMusic, onPause, resetProcess } = props;
+  const { toggleMusicList, onPlay, nextMusic, onPause, resetProcess, showModal } = props;
 
   useEffect(() => {
     // other code
@@ -236,7 +237,8 @@ const MusicList = (props: IProps, ref: any) => {
       song_name: item.song_name,
       song_singer: item.song_singer,
       song_url: item.song_url,
-      song_hot: item.song_hot
+      song_hot: item.song_hot,
+      song_album: item.song_album
     });
     store.dispatch(currentMusicAction);
     onPlay();
@@ -269,6 +271,7 @@ const MusicList = (props: IProps, ref: any) => {
         song_singer: "",
         song_url: "",
         song_hot: "",
+        song_album: ""
       });
       store.dispatch(currentMusicAction);
       onPause();
@@ -288,6 +291,7 @@ const MusicList = (props: IProps, ref: any) => {
       song_singer: "",
       song_url: "",
       song_hot: 0,
+      song_album: ""
     });
     store.dispatch(currentMusicAction);
     store.dispatch(clearMusicAction);
@@ -301,13 +305,33 @@ const MusicList = (props: IProps, ref: any) => {
     (props as any).history.replace(`/songdetail?id=${record.id}`);
   }
 
+  // 收藏全部
+  const saveAllMusic = async () => {
+    const { username, id, avatar_url } = store.getState().userInfo;
+    const musicList = store.getState().musicList;
+    if (musicList.length === 0) return message.info('列表没有歌曲！');
+    if (username && avatar_url && id) {
+      const params = {
+        type: 'saveAll',
+        user_id: id,
+        song_id: musicList.map((item: any) => item.id)
+      }
+      const res = await saveMusic(params);
+      if ((res as RESPONSE_INFO).status === 200) {
+        message.info('收藏成功！');
+      }
+    } else {
+      showModal();
+    }
+  }
+
   return (
     <div className="musicList" ref={musicListRef}>
       <div className="music-list-head">
         <div className="music-list-head-title">
           播放列表({musicList.length})
         </div>
-        <div className="music-list-head-collect">
+        <div className="music-list-head-collect" onClick={saveAllMusic}>
           <div className="save_all">
             <Tooltip title="收藏全部">
               <img className="save_all_img" src={require('../../assets/images/save_music.png').default} alt="收藏全部" />
@@ -382,7 +406,7 @@ const MusicList = (props: IProps, ref: any) => {
                           <div className="col music-list-li-col-5">
                             <Tooltip title={item.song_album ? item.song_album : '暂无'}>
                               <span className="music-list-li-text">
-                                {item.song_album ? item.song_album : '暂无'}
+                                {item.song_album || '暂无'}
                               </span>
                             </Tooltip>
                           </div>

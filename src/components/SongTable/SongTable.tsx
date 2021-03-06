@@ -38,10 +38,12 @@ const SongTable = (props: IProps, ref: any) => {
 
 
   useEffect(() => {
+    // other code
     const { setParentOperationId } = props;
     if (setParentOperationId) {
       setParentOperationId(operationId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [operationId])
 
   // 翻页事件

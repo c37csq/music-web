@@ -343,11 +343,13 @@ const CommentList = (props: IProps, ref: any) => {
                       </div>
                       <div style={{ display: `${showId === item.id ? 'block' : 'none'}` }} className="item_comment">
                         <Comment
+                          buttonText="回 复"
                           relyTo={relyToInfo}
                           avatarSize={40}
                           getList={getList}
                           isShowHeader={false}
                           song_id={song_id}
+                          type="comment"
                         />
                       </div>
                     </div>

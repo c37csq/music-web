@@ -1,5 +1,5 @@
 import { SONG } from '../global';
-import { CHANGE_ROUTE, CHANGE_LOGIN_STATUS, action, SET_USER_TOKEN, ADD_MUSIC_LIST, SET_CURRENT_MUSIC, DELETE_MUSIC, CLEAR_MUSIC } from './actionTypes';
+import { CHANGE_ROUTE, CHANGE_SHARE_STATUS, CHANGE_LOGIN_STATUS, action, SET_USER_TOKEN, ADD_MUSIC_LIST, SET_CURRENT_MUSIC, DELETE_MUSIC, CLEAR_MUSIC } from './actionTypes';
 
 // 从sessionStorage取出 route 的值
 let routeStorage = sessionStorage.getItem('route');
@@ -35,6 +35,7 @@ let currentMusic = currentMusicStorage ? JSON.parse(currentMusicStorage) : {
   song_singer: "",
   song_url: "",
   song_hot: 0,
+  song_album: ""
 };
 
 const initState = {
@@ -42,6 +43,9 @@ const initState = {
   route: routeUrl,
   // 是注册还是登录
   status: 'index',
+  // 分享音乐
+  shareStatus: 'index',
+  isAddMusic: false,
   // token
   token: token,
   // 用户信息
@@ -82,6 +86,9 @@ const reducer = (state = initState, action: action) => {  //就是一个方法�
     case CLEAR_MUSIC:
       newState.musicList = action.value;
       sessionStorage.setItem("musicList", JSON.stringify(newState.musicList));
+      return newState;
+    case CHANGE_SHARE_STATUS:
+      newState.shareStatus = action.value;
       return newState;
   }
   return state;

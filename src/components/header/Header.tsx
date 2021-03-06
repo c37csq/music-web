@@ -31,7 +31,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   private avatarFloat: React.RefObject<FloatAvatar>;
   constructor(props: HeaderProps) {
     super(props);
-    
+
     // 订阅store
     this.cancelSub = store.subscribe(() => {
       const state = store.getState();
@@ -57,7 +57,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   state: HeaderState = {
     menuList: [
       { pathname: '/home', label: '发现音乐' },
-      { pathname: '/addmusic', label: '推荐音乐' },
+      { pathname: '/addmusic', label: '分享音乐' },
       { pathname: '/myspace', label: '我的空间' },
     ],
     visible: false,
@@ -88,7 +88,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   }
 
   // 取消订阅方法就是订阅的返回值
-  cancelSub = () => {};
+  cancelSub = () => { };
 
   componentWillUnmount() {
     // 取消redux订阅
@@ -115,6 +115,14 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     if (avatar) {
       avatar.hideAvatarFloat();
     }
+  }
+
+  componentDidMount() {
+    // 监听路由改变
+    this.props.history.listen(route => {
+      const action = changeRoute(route.pathname);
+      store.dispatch(action);
+    })
   }
 
   public render() {

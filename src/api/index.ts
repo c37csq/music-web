@@ -1,5 +1,5 @@
 import ajax from './ajax';
-import { ADDMUSIC_FORM, ADD_HOT, AVATAR_PROPS, COMMENT, COMMENT_LIST, DELETE_COMMENT, DISGOOD, DOWN_SONG, GET_SONG_DETAIL, GOOD, LOGIN_FORM, REGESTER_FORM, RELY_COMMENT, SAVE_MUSIC, SONG_PARAMS } from '../global'
+import { ADDMUSIC_FORM, ADD_DYNAMIC, ADD_HOT, AVATAR_PROPS, COMMENT, COMMENT_LIST, DELETE_COMMENT, DISGOOD, DISGOOD_DYNAMIC, DOWN_SONG, GET_SONG_DETAIL, GOOD, GOOD_DYNAMIC, LOGIN_FORM, REGESTER_FORM, RELY_COMMENT, SAVE_MUSIC, SONG_PARAMS } from '../global'
 
 // 基本路径
 export const BASE = 'http://127.0.0.1:7001/default';
@@ -52,6 +52,9 @@ export const getCommentList = (params: COMMENT_LIST) => ajax(BASE + '/getComment
 // 回复评论
 export const relyComment = (params: RELY_COMMENT) => ajax(BASE + '/relyComment', params, 'POST');
 
+// 回复动态
+export const relyDynamic = (params: RELY_COMMENT) => ajax(BASE + '/relyDynamic', params, 'POST');
+
 // 点赞
 export const goodToPerson = (params: GOOD) => ajax(BASE + '/goodToPerson', params, 'POST');
 
@@ -69,3 +72,18 @@ export const getSameListById = (params: { type: number[], song_id: number }) => 
 
 // 通过id获取列表
 export const getDynamicList = (params: { id: number }) => ajax(BASE + '/getDynamicList', params);
+
+// 通过歌曲关键词获取列表
+export const getSongsByLike = (params: { like: string }) => ajax(BASE + '/getSongsByLike', params);
+
+// 添加动态
+export const addDynamic = (params: ADD_DYNAMIC) => ajax(BASE + '/addDynamic', params, 'POST');
+
+// 动态列表点赞
+export const goodToDynamic = (params: GOOD_DYNAMIC) => ajax(BASE + '/goodToDynamic', params, 'POST');
+
+// 取消点赞
+export const disGoodToDynamic = (params: DISGOOD_DYNAMIC) => ajax(BASE + '/disGoodToDynamic', params, 'POST');
+
+// 删除评论
+export const deleteDynamic = (params: DELETE_COMMENT) => ajax(BASE + '/deleteDynamic', params, 'POST');

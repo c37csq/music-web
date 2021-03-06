@@ -1,0 +1,117 @@
+
+.ant-modal-body {
+  position: relative;
+  .wrapper {
+    position: relative;
+    top: -20px;
+    .add_music {
+      position: absolute;
+      top: 69px;
+      left: 57.5px;
+      width: 414px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      opacity: 0.75;
+      .exist {
+        width: 100%;
+        height: 100%;
+        border-top: 1px solid #cccccc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .left {
+          width: 400px;
+          .song_info {
+            line-height: 50px;
+            color: #333;
+            font-size: 15px;
+            cursor: pointer;
+          }
+        }
+        .right {
+          cursor: pointer;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      .to_add_music {
+        width: 100%;
+        height: 100%;
+        border-top: 1px solid #cccccc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .text {
+          width: 400px;
+          .add_text {
+            line-height: 50px;
+            color: #333;
+            font-size: 15px;
+            cursor: pointer;
+          }
+        }
+        .add {
+          cursor: pointer;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          img {
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+          }
+        }
+      }
+    }
+    .add_music:hover {
+      opacity: 1;
+    }
+    .ant-input-textarea.ant-input-textarea-show-count {
+      .textarea::after {
+        content: " ";
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-left: 12px solid transparent;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+        border-right: 12px solid #999999;
+        position: absolute;
+        left: -23px;
+        top: 6px;
+        z-index: 998;
+      }
+      .ant-input {
+        height: 120px !important;
+      }
+    }
+    .ant-input-textarea.ant-input-textarea-show-count::after {
+      padding-right: 60px;
+      margin-top: 11px !important;
+    }
+  }
+  .music_list {
+    padding: 0 15px;
+    .table_list {
+      border: 1px solid #cccccc;
+    }
+    .back {
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

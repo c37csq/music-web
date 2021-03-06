@@ -9,8 +9,9 @@ import CommentList from '../../components/CommentList/CommentList';
 import store from '../../store';
 import { GlobalContext } from '../index/default';
 import { addMusicList } from '../../store/actionCreators';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-interface IProps { }
+interface IProps extends RouteComponentProps { }
 
 const SongDetail = (props: IProps, ref: any) => {
 
@@ -52,6 +53,11 @@ const SongDetail = (props: IProps, ref: any) => {
   // 解决登录不刷新问题
   useEffect(() => {
     // other code
+    // 监听路由改变
+    props.history.listen(route => {
+      const newId = parseInt(route.search.split('=')[1]);
+      setId(newId);
+    })
     // 取消订阅
     const cancelSub = store.subscribe(() => {
       if (!flag) {
@@ -102,12 +108,11 @@ const SongDetail = (props: IProps, ref: any) => {
 
   // 播放音乐
   const playMusic = async (obj: any, record: any) => {
-    const currentMusic = store.getState().currentMusic;
-    if ((currentMusic as SONG).id === record.id) return;
     // 播放音乐
     obj.playMusic(record);
     // 增加该条歌曲热度
     const res = await addHot({ song_id: record.id, song_hot: record.song_hot });
+    console.log(res);
   }
 
   // 添加音乐到全局播放列表
@@ -138,9 +143,6 @@ const SongDetail = (props: IProps, ref: any) => {
     e.stopPropagation();
     if (record.id === id) return;
     (props as any).history.replace(`/songdetail?id=${record.id}`);
-    setId(record.id);
-    getSongDetail(record.id);
-    getList(record.id);
   }
 
   // 计算全部评论数量
@@ -223,11 +225,13 @@ const SongDetail = (props: IProps, ref: any) => {
                 <div className="song_detail_content_left_bottom">
                   <div className="comment_area">
                     <Comment
+                      buttonText="评 论"
                       avatarSize={50}
                       isShowHeader={true}
                       getList={getList}
                       total={getCommentNums(commentList)}
-                      song_id={id} />
+                      song_id={id}
+                      type="comment" />
                   </div>
                   <div className="comment_list">
                     <CommentList
@@ -302,4 +306,4 @@ const SongDetail = (props: IProps, ref: any) => {
   )
 }
 
-export default SongDetail;
+export default withRouter(SongDetail);

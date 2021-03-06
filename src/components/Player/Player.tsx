@@ -1,11 +1,14 @@
 import './Player.less';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Tooltip } from 'antd'
+import { message, Tooltip } from 'antd'
 import store from '../../store/index';
-import { SONG } from '../../global';
+import { RESPONSE_INFO, SONG } from '../../global';
 import { getTime } from '../../utils/utils';
 import { setCurrentMusic } from '../../store/actionCreators';
 import MusicList from '../../components/MusicList/MusicList';
+import Login from '../Login/Login';
+import { saveMusic } from '../../api/index';
+import ShareMusic from '../ShareMusic/ShareMusic';
 
 interface IProps { }
 
@@ -31,6 +34,21 @@ const Player = (props: IProps, ref: any) => {
   const [volumeProgressItemMove, setVolumeProgressItemMove] = useState(false);
   // 音量控制面板是否显示
   const [volumeControl, setVolumeControl] = useState(false);
+
+  // 弹窗显示
+  const [visible, setVisible] = useState(false);
+
+  // 分享音乐弹窗显示
+  const [shareVisible, setShareVisible] = useState(false);
+
+  // 分享的音乐
+  const [shareMusic, setShareMusic] = useState({
+    id: -1,
+    song_name: "",
+    song_singer: "",
+    song_url: "",
+    song_hot: 0
+  });
 
   const playModeStorage = sessionStorage.getItem('playMode');
   const playModeSession = playModeStorage ? JSON.parse(playModeStorage) : 1;
@@ -553,6 +571,7 @@ const Player = (props: IProps, ref: any) => {
       song_singer: data.song_singer,
       song_url: data.song_url,
       song_hot: data.song_hot,
+      song_album: data.song_album
     });
     store.dispatch(currentMusicAction);
   }
@@ -562,9 +581,79 @@ const Player = (props: IProps, ref: any) => {
     setMusicListShow(!isMusicListShow);
   }
 
+  // 收藏音乐
+  const saveCurrentMusic = async () => {
+    const currentMusic = store.getState().currentMusic;
+    const { username, id, avatar_url } = store.getState().userInfo;
+    if (currentMusic.id < 0) return message.info('当前没有音乐！');
+    if (username && avatar_url && id) {
+      const params = {
+        type: 'save',
+        user_id: id,
+        song_id: currentMusic.id
+      }
+      const res = await saveMusic(params);
+      if ((res as RESPONSE_INFO).status === 444) {
+        message.info('你已收藏该音乐了！');
+      } else if ((res as RESPONSE_INFO).status === 200) {
+        message.info('收藏成功！');
+      }
+    } else {
+      showModal();
+    }
+  }
+
+  // 分享当前音乐
+  const shareCurrentMusic = async () => {
+    const { username, id, avatar_url } = store.getState().userInfo;
+    const currentMusic = store.getState().currentMusic;
+    if (currentMusic.id < 0) return message.info('当前没有音乐！');
+    if (username && avatar_url && id) {
+      showShareModal();
+      const song = {
+        id: currentMusic.id,
+        song_name: currentMusic.song_name,
+        song_singer: currentMusic.song_singer,
+        song_url: currentMusic.song_url,
+        song_hot: currentMusic.song_hot,
+      }
+      setShareMusic(song);
+    } else {
+      showModal();
+    }
+  }
+
+  // 显示弹窗
+  const showModal = () => {
+    setVisible(true);
+  }
+
+  // 显示分享弹窗
+  const showShareModal = () => {
+    setShareVisible(true);
+  }
+
+  // 关闭分享弹窗
+  const closeShareModal = () => {
+    setShareVisible(false);
+  }
+
+  // 关闭弹窗
+  const closeModal = () => {
+    setVisible(false);
+  }
+  const { id } = store.getState().userInfo;
+
   const { song_url, song_singer, song_name } = currentMusic;
   return (
     <div className="player_wrapper">
+      <Login closeModal={closeModal} visible={visible} />
+      <ShareMusic
+        shareMusic={shareMusic}
+        userId={id}
+        closeModal={closeShareModal}
+        title="分享音乐"
+        visible={shareVisible} />
       {/* 主要内容 */}
       <div
         className="audio_content"
@@ -634,12 +723,12 @@ const Player = (props: IProps, ref: any) => {
           </div>
           {/* 加入歌单和分享 */}
           <div className="right_folder">
-            <div className="save_music">
+            <div className="save_music" onClick={saveCurrentMusic}>
               <Tooltip title="收藏">
                 <img src={require('../../assets/images/save_music.png').default} alt="收藏音乐" />
               </Tooltip>
             </div>
-            <div className="share_music">
+            <div className="share_music" onClick={shareCurrentMusic}>
               <Tooltip title="分享">
                 <img src={require('../../assets/images/share_music.png').default} alt="分享音乐" />
               </Tooltip>
@@ -697,11 +786,12 @@ const Player = (props: IProps, ref: any) => {
           {/* 歌单组件 */}
           {
             isMusicListShow && (
-              <MusicList 
-                resetProcess={resetProcess} 
-                onPause={onPause} 
-                nextMusic={nextMusic} 
-                onPlay={onPlay} 
+              <MusicList
+                showModal={showModal}
+                resetProcess={resetProcess}
+                onPause={onPause}
+                nextMusic={nextMusic}
+                onPlay={onPlay}
                 toggleMusicList={toggleMusicList} />
             )
           }

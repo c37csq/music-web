@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { getSongTypes, getSongs, addHot, downSong } from '../../api/index';
+import { getSongTypes, getSongs, addHot, downSong, saveMusic } from '../../api/index';
 import SongType from '../../components/SongType/SongType';
 import SongTable from '../../components/SongTable/SongTable';
 import './home.less';
-import { SONG, SONG_ITEM, SONG_PARAMS, SONG_TYPES } from '../../../src/global';
+import { RESPONSE_INFO, SONG, SONG_ITEM, SONG_PARAMS, SONG_TYPES } from '../../../src/global';
 import { message, Tooltip } from 'antd';
 import store from '../../store';
 import { GlobalContext } from '../index/default';
 import { addMusicList } from '../../store/actionCreators';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import Login from '../../components/Login/Login';
+import ShareMusic from '../../components/ShareMusic/ShareMusic';
 
 interface IState {
   songTypes: SONG_TYPES,
@@ -17,7 +18,15 @@ interface IState {
   songList: Array<SONG>,
   currentMusic: SONG | {},
   operationId: number,
-  visible: boolean
+  visible: boolean,
+  shareVisible: boolean,
+  shareMusic: {
+    id: number,
+    song_name: string,
+    song_singer: string,
+    song_url: string,
+    song_hot: number
+  }
 }
 
 interface IProps extends RouteComponentProps {
@@ -60,7 +69,15 @@ class Home extends React.Component<IProps, IState> {
     songList: [],
     currentMusic: store.getState().currentMusic,
     operationId: 0,
-    visible: false
+    visible: false,
+    shareVisible: false,
+    shareMusic: {
+      id: -1,
+      song_name: "",
+      song_singer: "",
+      song_url: "",
+      song_hot: 0
+    }
   }
 
   async componentDidMount() {
@@ -113,9 +130,11 @@ class Home extends React.Component<IProps, IState> {
       song_url: record.song_url,
       song_hot: record.song_hot,
       song_singer: record.song_singer,
+      song_album: record.song_album
     });
     // 增加该条歌曲热度
     const res = await addHot({ song_id: record.id, song_hot: record.song_hot });
+    console.log(res);
   }
 
   // 获取子组件的状态
@@ -150,6 +169,7 @@ class Home extends React.Component<IProps, IState> {
         song_url: record.song_url,
         song_hot: record.song_hot,
         song_singer: record.song_singer,
+        song_album: record.song_album
       });
       store.dispatch(action);
       // 增加该条歌曲热度
@@ -198,6 +218,61 @@ class Home extends React.Component<IProps, IState> {
     });
   }
 
+  // 关闭弹窗
+  closeShareModal = () => {
+    this.setState({
+      shareVisible: false
+    })
+  }
+
+  // 显示分享弹框
+  showShareModal = () => {
+    this.setState({
+      shareVisible: true
+    });
+  }
+
+  // 收藏音乐
+  saveMusic = async (item: SONG) => {
+    const { username, id, avatar_url } = store.getState().userInfo;
+
+    if (username && avatar_url && id) {
+      const params = {
+        type: 'save',
+        user_id: id,
+        song_id: item.id
+      }
+      const res = await saveMusic(params);
+      if ((res as RESPONSE_INFO).status === 444) {
+        message.info('你已收藏该音乐！');
+      } else if ((res as RESPONSE_INFO).status === 200) {
+        message.info('收藏成功！');
+      }
+    } else {
+      this.showModal();
+    }
+  }
+
+  // 分享音乐
+  shareMusic = async (item: SONG) => {
+    const { username, id, avatar_url } = store.getState().userInfo;
+    if (username && avatar_url && id) {
+      this.showShareModal();
+      const song = {
+        id: item.id,
+        song_name: item.song_name,
+        song_singer: item.song_singer,
+        song_url: item.song_url,
+        song_hot: item.song_hot,
+      }
+      this.setState({
+        shareMusic: song
+      });
+    } else {
+      this.showModal();
+    }
+  }
+
   // 去歌曲详情页面
   goDetail = (record: SONG) => {
     (this.props as any).history.push(`/songdetail?id=${record.id}`);
@@ -205,6 +280,7 @@ class Home extends React.Component<IProps, IState> {
 
   public render() {
     const { songTypes, songType, songList, currentMusic, operationId } = this.state;
+    const { id } = store.getState().userInfo;
 
     // 表格的行列
     const columns = [
@@ -230,7 +306,9 @@ class Home extends React.Component<IProps, IState> {
             </GlobalContext.Consumer>
           </div>
       },
-      { title: '歌曲标题', dataIndex: 'song_name', width: 130, ellipsis: true, render: (text: string, record: SONG) => <span className="song_name" onClick={() => this.goDetail(record)}>{text}</span> },
+      {
+        title: '歌曲标题', dataIndex: 'song_name', width: 130, ellipsis: true, render: (text: string, record: SONG) => <span className="song_name" onClick={() => this.goDetail(record)}>{text}</span>
+      },
       { title: '歌手', dataIndex: 'song_singer', ellipsis: true, width: 120 },
       {
         title: '发布时间', dataIndex: 'create_time', ellipsis: true, width: 95, render: (text: string, record: any, index: number) =>
@@ -242,12 +320,12 @@ class Home extends React.Component<IProps, IState> {
                   <img src={require('../../assets/images/add.png').default} alt="添加" />
                 </Tooltip>
               </div>
-              <div className="img_operator">
+              <div className="img_operator" onClick={() => this.saveMusic(record)}>
                 <Tooltip title="收藏">
                   <img src={require('../../assets/images/save.png').default} alt="收藏" />
                 </Tooltip>
               </div>
-              <div className="img_operator">
+              <div className="img_operator" onClick={() => this.shareMusic(record)}>
                 <Tooltip title="分享">
                   <img src={require('../../assets/images/send.png').default} alt="分享" />
                 </Tooltip>
@@ -274,10 +352,16 @@ class Home extends React.Component<IProps, IState> {
           </div>
       },
     ];
-    const { visible } = this.state;
+    const { visible, shareVisible, shareMusic } = this.state;
 
     return (
       <div className="Home_Content_Wrapper">
+        <ShareMusic
+          shareMusic={shareMusic}
+          userId={id}
+          closeModal={this.closeShareModal}
+          title="发布动态"
+          visible={shareVisible} />
         <Login closeModal={this.closeModal} visible={visible} />
         <SongType
           getSongItem={this.getSongItem}

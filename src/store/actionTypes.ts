@@ -25,4 +25,7 @@ export const DELETE_MUSIC = 'deleteMusic';
 // 清空歌曲
 export const CLEAR_MUSIC = 'clearMusic';
 
+// 改变分享状态
+export const CHANGE_SHARE_STATUS = 'changeShareStatus';
+
 
