@@ -201,7 +201,7 @@ input:-ms-input-placeholder{
   border: 1px solid #ccc !important;
 }
 
-.ant-pagination-prev a {
+.ant-pagination-prev span {
   font-size: 12px !important;
 }
 
@@ -211,7 +211,7 @@ input:-ms-input-placeholder{
   border: 1px solid #ccc !important;
 }
 
-.ant-pagination-next a {
+.ant-pagination-next span {
   font-size: 12px !important;
 }
 
@@ -237,6 +237,21 @@ input:-ms-input-placeholder{
 .textarea .ant-input:hover {
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* 重写按钮样式 */
+.ant-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ant-btn:hover {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ant-btn {
+  border: 1px solid #999999 !important;
 }
 
 .ant-input-affix-wrapper {

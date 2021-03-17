@@ -300,6 +300,106 @@
     .right {
       width: 298px;
       min-height: 700px;
+      .top {
+        height: 225px;
+        background-color: #F3F3F3;
+        padding: 30px;
+        .top_content {
+          width: 100%;
+          height: 100%;
+          .person_info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            .info_left {
+              width: 70px;
+              height: 70px;
+              .avatar_img {
+                width: 70px;
+                height: 70px;
+                border: 2px solid #ffffff;
+                cursor: pointer;
+                img {
+                  width: 70px;
+                  height: 70px;
+                }
+              }
+            }
+            .info_right {
+              width: 155px;
+              height: 70px;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              .name {
+                font-size: 14px;
+                cursor: pointer;
+                color: #000000;
+                font-weight: 500;
+              }
+              .name:hover {
+                text-decoration: underline;
+              }
+              .introduce {
+                line-height: 19px;
+                color: #888;
+                text-overflow: ellipsis;   
+                height: 38px;
+                overflow: hidden; 
+                font-size: 12px;
+              }
+            }
+          }
+          .person_counts {
+            width: 100%;
+            height: 50px;
+            margin-top: 35px;
+            .counts_info {
+              width: 100%;
+              height: 50px;
+              display: flex;
+              align-items: center;
+              justify-content: flex-start;
+              > a {
+                width: 85px;
+                height: 50px;
+                padding: 0 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                .count {
+                  font-size: 20px;
+                  line-height: 20px;
+                  color: #333333;
+                }
+                .type {
+                  font-size: 13px;
+                  color: #333333;
+                }
+                p {
+                  margin: 0;
+                  cursor: pointer;
+                }
+              }
+              .dynamic {
+                border-right: 1px solid #cccccc;
+              }
+              > a:hover {
+                .count {
+                  color: #30AAE5;
+                }
+                .type {
+                  color: #30AAE5;
+                }
+              }
+              .looks {
+                border-right: 1px solid #cccccc;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

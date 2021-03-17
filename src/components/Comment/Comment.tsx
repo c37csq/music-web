@@ -115,7 +115,7 @@ const Comment = (props: IProps, ref: any) => {
       if (music) {
         if ((music as SELECT_MUSIC).id < 0) return message.info('请选择一首音乐！');
         // 获取用户信息
-        const { avatar_url, id, username } = store.getState().userInfo;
+        const { avatar_url, id, username, dynamicCounts } = store.getState().userInfo;
         const params = {
           likeCounts: 0,
           avatar_url,
@@ -124,6 +124,7 @@ const Comment = (props: IProps, ref: any) => {
           song_id: music.id,
           user_id: id,
           username,
+          dynamicCounts,
         }
         const res = await addDynamic(params);
         if ((res as RESPONSE_INFO).status === 200) {

@@ -71,7 +71,7 @@ class RegesterForm extends React.Component<{}, {}> {
             rules={
               [
                 { required: true, message: '请输入用户名' }, 
-                { min: 6, max: 10, message: '用户名长度要在1到10之间' }
+                { min: 6, max: 10, message: '用户名长度要在6到10之间' }
               ]
             }
           >

@@ -13,6 +13,7 @@ import { SONG } from '../../global';
 import Player from '../../components/Player/Player';
 import './Default.less';
 import SongDetail from '../SongDetail/SongDetail';
+import User from '../User/User';
 
 const { Content } = Layout;
 
@@ -112,6 +113,7 @@ class Default extends React.Component<{}, {}> {
                   <Route path="/addmusic" component={AddMusic} />
                   <Route path="/myspace" component={MySpace} />
                   <Route path="/songdetail" component={SongDetail} />
+                  <Route path="/user" component={User} />
                   <Route component={NoFoundPage} />
                 </Switch>
               </div>

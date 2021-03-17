@@ -67,10 +67,10 @@ const SongTable = (props: IProps, ref: any) => {
 
   const itemRender = (current: number, type: string, originalElement: any) => {
     if (type === 'prev') {
-      return <a>上一页</a>;
+      return <span>上一页</span>;
     }
     if (type === 'next') {
-      return <a>下一页</a>;
+      return <span>下一页</span>;
     }
     return originalElement;
   }

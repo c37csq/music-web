@@ -193,13 +193,13 @@ const SongDetail = (props: IProps, ref: any) => {
                       <div className="content_singer">
                         歌手：
                   <Tooltip placement="topLeft" title={song_detail.song_singer}>
-                          <span className="singer text_hidden">{song_detail.song_singer}</span>
+                          <a className="singer text_hidden">{song_detail.song_singer}</a>
                         </Tooltip>
                       </div>
                       <div className="content_create">
                         发布者：
                   <Tooltip placement="topLeft" title={song_detail.create_user}>
-                          <span className="creator text_hidden">{song_detail.create_user}</span>
+                          <a href={`/#/user/home?id=${song_detail.create_id}`} className="creator text_hidden">{song_detail.create_user}</a>
                         </Tooltip>
                       </div>
                     </div>
@@ -255,9 +255,9 @@ const SongDetail = (props: IProps, ref: any) => {
                           {
                             (song_detail.likePersons as LIKE_PERSONS_ITEM[]).slice(0, 6).map((item: LIKE_PERSONS_ITEM) => {
                               return (
-                                <div key={item.user_id} className="item_avatar">
+                                <a href={`/#/user/home?id=${item.user_id}`} key={item.user_id} className="item_avatar">
                                   <img src={item.avatar_url} alt={item.username} />
-                                </div>
+                                </a>
                               )
                             })
                           }

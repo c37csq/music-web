@@ -228,9 +228,9 @@ const CommentList = (props: IProps, ref: any) => {
                     onMouseOut={() => hideDelete(item.id)}
                     key={item.id}
                     className="comment_list_item">
-                    <div className="comment_list_item_avatar">
+                    <a href={`/#/user/home?id=${item.user_id}`} className="comment_list_item_avatar">
                       <img src={item.avatar_url} alt="头像" />
-                    </div>
+                    </a>
                     <div className="comment_list_item_content">
                       <div className="comment_list_item_username">{item.username}</div>
                       <div className="comment_list_item_speak word_wrap">
@@ -285,9 +285,9 @@ const CommentList = (props: IProps, ref: any) => {
                                 onMouseOut={(e) => hideChildDelete(e)}
                                 key={child.childId}
                                 className="comment_child_item">
-                                <div className="comment_child_item_avatar">
+                                <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_avatar">
                                   <img src={child.childAvatarUrl} alt="头像" />
-                                </div>
+                                </a>
                                 <div className="comment_child_item_content">
                                   <div className="comment_child_item_username">{child.childUsername}</div>&emsp;
                                   <span>回复</span>&emsp;

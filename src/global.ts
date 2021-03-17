@@ -55,7 +55,10 @@ export type RESPONSE_INFO = {
 export type USERINFO = {
   username: string,
   id: number,
-  avatar_url: string
+  avatar_url: string,
+  dynamicCounts: number,
+  likeCounts: number,
+  concernedCounts: number
 }
 
 // 用户登录返回信息
@@ -124,7 +127,9 @@ export type STORE = {
 // 定义获取歌曲列表的参数
 export type SONG_PARAMS = {
   status: string,
-  typeId: number
+  typeId: number,
+  user_id?: number,
+  type?: string
 }
 
 // 增加歌曲热度参数类型
@@ -292,5 +297,6 @@ export type ADD_DYNAMIC = {
   content: string,
   song_id: number,
   user_id: number,
-  username: string
+  username: string,
+  dynamicCounts: number
 }

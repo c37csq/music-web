@@ -6,8 +6,8 @@ import NoLogin from '../../components/NoLogin/NoLogin';
 import { useEffect, useState } from 'react';
 import Comment from '../../components/Comment/Comment';
 import ShareMusic from '../../components/ShareMusic/ShareMusic';
-import { addHot, deleteDynamic, disGoodToDynamic, getDynamicList, goodToDynamic } from '../../api';
-import { CHILD_COMMENT_LIKE, PARENT_COMMENT_LIKE, RELY, SONG, USERINFO } from '../../global';
+import { addHot, deleteDynamic, disGoodToDynamic, getDynamicList, getUserInfo, goodToDynamic } from '../../api';
+import { CHILD_COMMENT_LIKE, PARENT_COMMENT_LIKE, RELY, USERINFO } from '../../global';
 import { stopBubble } from '../../utils/utils';
 import { GlobalContext } from '../index/default';
 
@@ -18,6 +18,19 @@ const MySpace = (props: IProps, ref: any) => {
   const [token, setToken] = useState(store.getState().token);
 
   const [userId, setUserId] = useState(store.getState().userInfo.id);
+
+  // 用户信息不是储存在本地的
+  const [user, setUser] = useState({
+    id: -1,
+    avatar_url: "",
+    sex: "",
+    username: "",
+    dynamicCounts: 0,
+    likeCounts: 0,
+    concernedCounts: 0,
+    introduce: "",
+    age: null
+  });
 
   const [dynamicList, setDynamicList] = useState([]);
 
@@ -45,6 +58,7 @@ const MySpace = (props: IProps, ref: any) => {
   useEffect(() => {
     if (userId && userId > 0) {
       getList(userId);
+      getUserDetail(userId);
     }
   }, [userId]);
 
@@ -68,6 +82,14 @@ const MySpace = (props: IProps, ref: any) => {
     }
     const res = await getDynamicList(params);
     setDynamicList((res as any).arr);
+  }
+
+  // 获取用户信息
+  const getUserDetail = async (id: number) => {
+    const res = await getUserInfo({
+      user_id: id
+    });
+    setUser((res as any).data);
   }
 
   // 鼠标移入事件
@@ -253,6 +275,12 @@ const MySpace = (props: IProps, ref: any) => {
     }
   }
 
+  // 阻止拖拽
+  const refuse = (e: any): boolean => {
+    e.preventDefault();
+    return false;
+  }
+
   return (
     <div className="MySpace_Container">
       {
@@ -279,7 +307,7 @@ const MySpace = (props: IProps, ref: any) => {
                         dynamicList.length === 0 ? (
                           <div className="no_dynamic">
                             <div className="no_dynamic_img">
-                              <img src={require('../../assets/images/no_data.png').default} alt="暂无动态" />
+                              <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/no_data.png').default} alt="暂无动态" />
                               <div>暂无动态</div>
                             </div>
                           </div>
@@ -293,9 +321,9 @@ const MySpace = (props: IProps, ref: any) => {
                                       onMouseOut={() => hideDelete(item.id)}
                                       className="list_item"
                                       key={item.id}>
-                                      <div className="avatar">
-                                        <img src={item.avatar_url} alt="头像" />
-                                      </div>
+                                      <a href={`/#/user/home?id=${item.user_id}`} className="avatar">
+                                        <img onDragStart={(e) => refuse(e)} src={item.avatar_url} alt="头像" />
+                                      </a>
                                       <div className="list_item_content">
                                         <div className="comment_list_item_username"><span className="username">{item.username}</span> 分享单曲</div>
                                         <div className="comment_list_item_speak word_wrap">
@@ -305,6 +333,7 @@ const MySpace = (props: IProps, ref: any) => {
                                           <div
                                             className="left_img">
                                             <img
+                                              onDragStart={(e) => refuse(e)}
                                               onClick={() => playMusic(obj, item.song)}
                                               src={require('../../assets/images/play_music.png').default} alt="播放" />
                                           </div>
@@ -329,7 +358,7 @@ const MySpace = (props: IProps, ref: any) => {
                                                 style={{ display: `${checkUserGood(userInfo, item.likePersons) ? 'inline-block' : 'none'}` }}
                                                 className="good_img">
                                                 <Tooltip title="取消点赞">
-                                                  <img src={require('../../assets/images/good.png').default} alt="取消点赞" />
+                                                  <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/good.png').default} alt="取消点赞" />
                                                 </Tooltip>
                                               </div>
                                               <div
@@ -337,7 +366,7 @@ const MySpace = (props: IProps, ref: any) => {
                                                 style={{ display: `${checkUserGood(userInfo, item.likePersons) ? 'none' : 'inline-block'}` }}
                                                 className="disgood_img">
                                                 <Tooltip title="点赞">
-                                                  <img src={require('../../assets/images/disgood.png').default} alt="点赞" />
+                                                  <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/disgood.png').default} alt="点赞" />
                                                 </Tooltip>
                                               </div>
                                               <span className="good_counts">
@@ -364,9 +393,9 @@ const MySpace = (props: IProps, ref: any) => {
                                                   onMouseOut={(e) => hideChildDelete(e)}
                                                   key={child.childId}
                                                   className="comment_child_item">
-                                                  <div className="comment_child_item_avatar">
-                                                    <img src={child.childAvatarUrl} alt="头像" />
-                                                  </div>
+                                                  <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_avatar">
+                                                    <img onDragStart={(e) => refuse(e)} src={child.childAvatarUrl} alt="头像" />
+                                                  </a>
                                                   <div className="comment_child_item_content">
                                                     <div className="comment_child_item_username">{child.childUsername}</div>&emsp;
                                             <span>回复</span>&emsp;
@@ -391,7 +420,7 @@ const MySpace = (props: IProps, ref: any) => {
                                                             style={{ display: `${checkUserGood(userInfo, child.likePersons) ? 'inline-block' : 'none'}` }}
                                                             className="good_img">
                                                             <Tooltip title="取消点赞">
-                                                              <img src={require('../../assets/images/good.png').default} alt="取消点赞" />
+                                                              <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/good.png').default} alt="取消点赞" />
                                                             </Tooltip>
                                                           </div>
                                                           <div
@@ -399,7 +428,7 @@ const MySpace = (props: IProps, ref: any) => {
                                                             style={{ display: `${checkUserGood(userInfo, child.likePersons) ? 'none' : 'inline-block'}` }}
                                                             className="disgood_img">
                                                             <Tooltip title="点赞">
-                                                              <img src={require('../../assets/images/disgood.png').default} alt="点赞" />
+                                                              <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/disgood.png').default} alt="点赞" />
                                                             </Tooltip>
                                                           </div>
                                                           <span className="good_counts">
@@ -450,7 +479,40 @@ const MySpace = (props: IProps, ref: any) => {
                       title="发布动态"
                       visible={modalVisible} />
                   </div>
-                  <div className="right">456</div>
+                  <div className="right">
+                    <div className="top">
+                      <div className="top_content">
+                        <div className="person_info">
+                          <a href={`/#/user/home?id=${user.id}`} className="info_left">
+                            <div className="avatar_img">
+                              <img onDragStart={(e) => refuse(e)} src={user.avatar_url} alt="头像"/>
+                            </div>
+                          </a>
+                          <div className="info_right">
+                            <div className="name">{user.username}</div>
+                            <div className="introduce word_wrap">个人介绍：{ user.introduce || "暂无" }。</div>
+                          </div>
+                        </div>
+                        <div className="person_counts">
+                          <div className="counts_info">
+                            <a href={`/#/user/dynamic?id=${user.id}`} className="dynamic">
+                              <p className="count">{user.dynamicCounts}</p>
+                              <p className="type">动态</p>
+                            </a>
+                            <a href={`/#/user/follows?id=${user.id}`} className="looks">
+                              <p className="count">{user.likeCounts}</p>
+                              <p className="type">关注</p>
+                            </a>
+                            <a href={`/#/user/fans?id=${user.id}`} className="fans">
+                              <p className="count">{user.concernedCounts}</p>
+                              <p className="type">粉丝</p>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bottom"></div>
+                  </div>
                 </div>
             }
           </GlobalContext.Consumer>

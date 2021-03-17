@@ -87,3 +87,6 @@ export const disGoodToDynamic = (params: DISGOOD_DYNAMIC) => ajax(BASE + '/disGo
 
 // 删除评论
 export const deleteDynamic = (params: DELETE_COMMENT) => ajax(BASE + '/deleteDynamic', params, 'POST');
+
+// 根据id获取用户信息
+export const getUserInfo = (params: { user_id: number }) => ajax(BASE + '/getUserInfo', params);

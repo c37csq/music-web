@@ -693,7 +693,7 @@ const Player = (props: IProps, ref: any) => {
           <div className="main_controller">
             <div className="music_controller">
               <div className="music_info">
-                <span className="title_info">{song_name}</span>
+                <a className="title_info" href={`/#/songdetail?id=${currentMusic.id}`}>{song_name}</a>
                 <span className="author_info">{song_singer}</span>
               </div>
               <div className="process_time">
