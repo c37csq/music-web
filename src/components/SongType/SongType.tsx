@@ -51,7 +51,9 @@ class SongType extends React.Component<IProps, IState> {
       const index = songTypeItem.findIndex(id => id === item);
       songTypeItem.splice(index, 1);
     } else {
-      if (songTypeItem.length >= count) return message.error(`最多选择${count}个！`);
+      if (count === 1) {
+        songTypeItem.splice(0, 1);
+      } else if (songTypeItem.length >= count) return message.error(`最多选择${count}个！`);
       songTypeItem.push(item);
     }
     this.setState({

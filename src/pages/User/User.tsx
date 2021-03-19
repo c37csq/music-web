@@ -1,22 +1,29 @@
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getUserInfo } from '../../api';
+import { disLikePerson, getUserInfo, likePerson } from '../../api';
 import './User.less';
 import { Switch, Route, Redirect } from 'react-router-dom'
 import SongList from './SongList/SongList';
 import Dynamic from './Dynamic/Dynamic';
 import Follows from './Follow/Follows';
 import Fans from './Fans/Fans';
+import store from '../../store';
+import { RESPONSE_INFO } from '../../global';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
-interface IProps { }
+interface IProps extends RouteComponentProps { }
 
 const User = (props: IProps, ref: any) => {
 
   const { search } = (props as any).location;
+
+  const userInfo = store.getState().userInfo;
   // 取到id
   const id = parseInt(search.replace(/^\?/, '').split('=')[1]);
 
   const [urlId, setId] = useState(id);
+
+  const [flag, setFlag] = useState(false);
 
   // 用户信息不是储存在本地的
   const [user, setUser] = useState({
@@ -28,7 +35,9 @@ const User = (props: IProps, ref: any) => {
     likeCounts: 0,
     concernedCounts: 0,
     introduce: "",
-    age: null
+    age: null,
+    fans: [],
+    concernPerson: []
   });
 
   useEffect(() => {
@@ -37,6 +46,20 @@ const User = (props: IProps, ref: any) => {
     getUserDetail(urlId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlId])
+
+  useEffect(() => {
+    // 监听路由改变
+    props.history.listen(route => {
+      const newId = parseInt(route.search.split('=')[1]);
+      if (!flag) {
+        setId(newId);
+      }
+    })
+    // 防止组件销毁后继续set组件状态引发报错
+    return () => {
+      setFlag(true);
+    }
+  }, [])
 
   // 获取用户信息
   const getUserDetail = async (id: number) => {
@@ -50,6 +73,54 @@ const User = (props: IProps, ref: any) => {
   const refuse = (e: any): boolean => {
     e.preventDefault();
     return false;
+  }
+
+  // 判断是否是自己访问当前页面
+  const checkUser = (): boolean => {
+    const { id } = userInfo;
+    if (id === urlId) {
+      return true;
+    }
+    return false;
+  }
+
+  // 关注
+  const likeIt = async () => {
+    const { id } = userInfo;
+    const params = {
+      user_id: id,
+      likeUserId: urlId,
+      concernCounts: user.concernedCounts
+    }
+    const res = await likePerson(params);
+    if ((res as RESPONSE_INFO).status === 200) {
+      message.info((res as RESPONSE_INFO).msg);
+      getUserDetail(urlId);
+    }
+  }
+
+  // 判断当前用户是否关注用户
+  const checkUserIsConcern = () => {
+    let flag = false;
+    if (user.fans.filter(item => parseInt(item) === userInfo.id).length > 0) {
+      flag = true;
+    }
+    return flag;
+  }
+
+  // 取消关注
+  const disLikeIt = async () => {
+    const { id } = userInfo;
+    const params = {
+      user_id: id,
+      likeUserId: urlId,
+      concernCounts: user.concernedCounts
+    }
+    const res = await disLikePerson(params);
+    if ((res as RESPONSE_INFO).status === 200) {
+      message.info((res as RESPONSE_INFO).msg);
+      getUserDetail(urlId);
+    }
   }
 
   return (
@@ -78,9 +149,20 @@ const User = (props: IProps, ref: any) => {
                     )
                   }
                 </div>
-                <div className="header_right">
+                <div style={{ display: `${checkUser() ? 'inline-block' : 'none'}` }} className="header_right">
                   <Button>编辑个人资料</Button>
                 </div>
+                {
+                  checkUserIsConcern() ? (
+                    <div style={{ display: `${checkUser() ? 'none' : 'inline-block'}` }} className="header_right">
+                      <Button onClick={disLikeIt} type="primary" danger>取消关注</Button>
+                    </div>
+                  ) : (
+                    <div style={{ display: `${checkUser() ? 'none' : 'inline-block'}` }} className="header_right">
+                      <Button onClick={likeIt} type="primary">关 注</Button>
+                    </div>
+                  )
+                }
               </div>
             </div>
             <div className="right_content">
@@ -101,9 +183,9 @@ const User = (props: IProps, ref: any) => {
                 </div>
               </div>
               <p className="introduce text_hidden">
-                个人介绍：{ user.introduce || "暂无" }
+                个人介绍：{user.introduce || "暂无"}
               </p>
-              <p className="age">年龄：{ user.age ? `${user.age}岁` : "未知"}</p>
+              <p className="age">年龄：{user.age ? `${user.age}岁` : "未知"}</p>
             </div>
           </div>
         </div>
@@ -115,8 +197,8 @@ const User = (props: IProps, ref: any) => {
           <Redirect to='/user/home' />
         </Switch>
       </div>
-    </div>
+    </div >
   )
 }
 
-export default User;
+export default withRouter(User);

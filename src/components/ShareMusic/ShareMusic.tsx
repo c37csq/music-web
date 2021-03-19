@@ -17,18 +17,30 @@ interface IProps {
   userId: number,
   getList?: Function,
   closeModal: Function,
+  user?: {
+    id: number,
+    avatar_url: string,
+    sex: string,
+    username: string,
+    dynamicCounts: number,
+    likeCounts: number,
+    concernedCounts: number,
+    introduce: string,
+    age: null
+  },
   shareMusic?: {
     id: number,
     song_name: string,
     song_singer: string,
     song_url: string,
     song_hot: number
-  }
+  },
+  getUserDetail?: Function
 }
 
 const ShareMusic = (props: IProps, ref: any) => {
 
-  const { visible, title, userId, getList, closeModal, shareMusic } = props;
+  const { visible, title, userId, getList, closeModal, shareMusic, getUserDetail, user } = props;
 
   const [shareStatus, setShareStatus] = useState(store.getState().shareStatus);
 
@@ -139,6 +151,8 @@ const ShareMusic = (props: IProps, ref: any) => {
         shareStatus === 'index' ? (
           <div className="wrapper">
             <Comment
+              user={user}
+              getUserDetail={getUserDetail}
               close={close}
               buttonText="发 布"
               getList={getList}

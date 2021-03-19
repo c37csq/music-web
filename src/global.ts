@@ -271,6 +271,8 @@ export type DISGOOD_DYNAMIC = {
 export type DELETE_COMMENT = {
   type: string,
   id: number,
+  user_id?: number,
+  dynamicCounts?: number,
   childId: number | number[]
 }
 
@@ -298,5 +300,5 @@ export type ADD_DYNAMIC = {
   song_id: number,
   user_id: number,
   username: string,
-  dynamicCounts: number
+  dynamicCounts: number | undefined
 }

@@ -230,18 +230,23 @@ const MySpace = (props: IProps, ref: any) => {
       params = {
         type: 'parent',
         id: item.id,
+        user_id: item.user_id,
+        dynamicCounts: user.dynamicCounts,
         childId: 0
       }
     } else {
       params = {
         type: 'parent',
         id: item.id,
+        user_id: item.user_id,
+        dynamicCounts: user.dynamicCounts,
         childId: (item.children as any).map((item: any) => item.childId)
       }
     }
     const res = await deleteDynamic(params);
     if ((res as any).status === 200) {
       message.info('删除成功！');
+      getUserDetail(userId);
       getList(userId);
     }
   }
@@ -325,7 +330,7 @@ const MySpace = (props: IProps, ref: any) => {
                                         <img onDragStart={(e) => refuse(e)} src={item.avatar_url} alt="头像" />
                                       </a>
                                       <div className="list_item_content">
-                                        <div className="comment_list_item_username"><span className="username">{item.username}</span> 分享单曲</div>
+                                        <div className="comment_list_item_username"><a href={`/#/user/home?id=${item.user_id}`} className="username">{item.username}</a> 分享单曲</div>
                                         <div className="comment_list_item_speak word_wrap">
                                           {item.content}
                                         </div>
@@ -338,7 +343,7 @@ const MySpace = (props: IProps, ref: any) => {
                                               src={require('../../assets/images/play_music.png').default} alt="播放" />
                                           </div>
                                           <div className="right_info">
-                                            <div className="name">{item.song.song_name}</div>
+                                            <a href={`/#/songdetail?id=${item.song.id}`} className="name">{item.song.song_name}</a>
                                             <div className="singer">{item.song.song_singer}</div>
                                           </div>
                                         </div>
@@ -397,7 +402,7 @@ const MySpace = (props: IProps, ref: any) => {
                                                     <img onDragStart={(e) => refuse(e)} src={child.childAvatarUrl} alt="头像" />
                                                   </a>
                                                   <div className="comment_child_item_content">
-                                                    <div className="comment_child_item_username">{child.childUsername}</div>&emsp;
+                                                    <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_username">{child.childUsername}</a>&emsp;
                                             <span>回复</span>&emsp;
                                             <span className="comment_child_item_username">@{child.relyPerson}</span>
                                                     <div className="comment_child_item_speak word_wrap">
@@ -473,6 +478,8 @@ const MySpace = (props: IProps, ref: any) => {
                       }
                     </div>
                     <ShareMusic
+                      user={user}
+                      getUserDetail={getUserDetail}
                       closeModal={closeModal}
                       getList={getList}
                       userId={userId}

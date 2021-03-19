@@ -18,7 +18,19 @@ interface IProps extends RouteComponentProps {
   type: string,
   music?: SELECT_MUSIC,
   close?: Function,
-  selectNone?: Function
+  selectNone?: Function,
+  getUserDetail?: Function
+  user?: {
+    id: number,
+    avatar_url: string,
+    sex: string,
+    username: string,
+    dynamicCounts: number,
+    likeCounts: number,
+    concernedCounts: number,
+    introduce: string,
+    age: null
+  }
 }
 
 const { TextArea } = Input;
@@ -32,7 +44,7 @@ const Comment = (props: IProps, ref: any) => {
   // visible
   const [visible, setVisible] = useState(false);
 
-  const { song_id, total, getList, isShowHeader, avatarSize, relyTo, buttonText, type, music, close, selectNone } = props;
+  const { song_id, total, getList, isShowHeader, avatarSize, relyTo, buttonText, type, music, close, selectNone, getUserDetail, user } = props;
 
   // 获取textarea节点元素
   const textArea = useRef<any>(null);
@@ -115,7 +127,11 @@ const Comment = (props: IProps, ref: any) => {
       if (music) {
         if ((music as SELECT_MUSIC).id < 0) return message.info('请选择一首音乐！');
         // 获取用户信息
-        const { avatar_url, id, username, dynamicCounts } = store.getState().userInfo;
+        const { avatar_url, id, username } = store.getState().userInfo;
+        let dynamicCounts;
+        if (user) {
+          dynamicCounts = user.dynamicCounts;
+        }
         const params = {
           likeCounts: 0,
           avatar_url,
@@ -124,11 +140,14 @@ const Comment = (props: IProps, ref: any) => {
           song_id: music.id,
           user_id: id,
           username,
-          dynamicCounts,
+          dynamicCounts
         }
         const res = await addDynamic(params);
         if ((res as RESPONSE_INFO).status === 200) {
           message.info('发布动态成功！');
+          if (getUserDetail) {
+            getUserDetail(id);
+          }
           if (close) {
             close();
             if (getList) {

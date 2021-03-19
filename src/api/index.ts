@@ -90,3 +90,12 @@ export const deleteDynamic = (params: DELETE_COMMENT) => ajax(BASE + '/deleteDyn
 
 // 根据id获取用户信息
 export const getUserInfo = (params: { user_id: number }) => ajax(BASE + '/getUserInfo', params);
+
+// 关注用户
+export const likePerson = (params: { user_id: number, likeUserId: number, concernCounts: number }) => ajax(BASE + '/likePerson', params, 'POST');
+
+// 关注用户
+export const disLikePerson = (params: { user_id: number, likeUserId: number, concernCounts: number }) => ajax(BASE + '/disLikePerson', params, 'POST');
+
+// 关注用户
+export const getConcernList = (params: { idArrs: number[] }) => ajax(BASE + '/getConcernList', params, 'POST');
