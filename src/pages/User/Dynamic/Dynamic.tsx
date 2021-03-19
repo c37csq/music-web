@@ -260,6 +260,15 @@ const Dynamic = (props: IProps, ref: any) => {
     }
   }
 
+  // 判断是否是自己访问当前页面
+  const checkUser = (): boolean => {
+    const { id } = userInfo;
+    if (id === userId) {
+      return true;
+    }
+    return false;
+  }
+
   // 获取关注列表
   const getConcernedList = async (concernPersons: number[]) => {
     const params = {
@@ -285,8 +294,8 @@ const Dynamic = (props: IProps, ref: any) => {
           <div className="Dynamic_Container">
             <div className="Dynamic_Header">
               <div className="header_title">
-                我的动态（{dynamicList.length}）
-          </div>
+                { checkUser() ? `我的动态（${dynamicList.length}）` : `TA的动态（${dynamicList.length}）`}
+              </div>
             </div>
             <div className="Dynamic_Content_Wrapper">
               <div className="left">
@@ -464,7 +473,7 @@ const Dynamic = (props: IProps, ref: any) => {
               <div className="right">
                 <div className="fans">
                   <div className="fans_header">
-                    我的关注
+                    { checkUser() ? '我的关注' : 'TA的关注' }
                   </div>
                   {
                     concernList.length === 0 ? (
