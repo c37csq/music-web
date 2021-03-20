@@ -6,8 +6,8 @@ import NoLogin from '../../components/NoLogin/NoLogin';
 import { useEffect, useState } from 'react';
 import Comment from '../../components/Comment/Comment';
 import ShareMusic from '../../components/ShareMusic/ShareMusic';
-import { addHot, deleteDynamic, disGoodToDynamic, getDynamicList, getUserInfo, goodToDynamic } from '../../api';
-import { CHILD_COMMENT_LIKE, PARENT_COMMENT_LIKE, RELY, USERINFO } from '../../global';
+import { addHot, deleteDynamic, disGoodToDynamic, disLikePerson, getDynamicList, getFans, getUserInfo, goodToDynamic, likePerson } from '../../api';
+import { CHILD_COMMENT_LIKE, PARENT_COMMENT_LIKE, RELY, RESPONSE_INFO, USERINFO } from '../../global';
 import { stopBubble } from '../../utils/utils';
 import { GlobalContext } from '../index/default';
 
@@ -29,10 +29,14 @@ const MySpace = (props: IProps, ref: any) => {
     likeCounts: 0,
     concernedCounts: 0,
     introduce: "",
-    age: null
+    age: null,
+    fans: [],
+    concernPerson: []
   });
 
   const [dynamicList, setDynamicList] = useState([]);
+
+  const [fansList, setFansList] = useState([]);
 
   // 父级评论鼠标hover的项
   const [parentHoverId, setParentHoverId] = useState(0);
@@ -84,12 +88,22 @@ const MySpace = (props: IProps, ref: any) => {
     setDynamicList((res as any).arr);
   }
 
+  //获取粉丝列表
+  const getFansList = async (fans: number[]) => {
+    const params = {
+      idArrs: fans
+    }
+    const res = await getFans(params);
+    setFansList((res as any).result);
+  }
+
   // 获取用户信息
   const getUserDetail = async (id: number) => {
     const res = await getUserInfo({
       user_id: id
     });
     setUser((res as any).data);
+    getFansList((res as any).data.fans);
   }
 
   // 鼠标移入事件
@@ -100,6 +114,44 @@ const MySpace = (props: IProps, ref: any) => {
   // 鼠标移出事件
   const hideDelete = (id: number) => {
     setParentHoverId(0);
+  }
+
+  // 取消关注
+  const disLikeIt = async (item: {
+    id: number,
+    username: string,
+    avatar_url: string,
+    introduce: string
+  }) => {
+    const params = {
+      user_id: userId,
+      likeUserId: item.id,
+      concernCounts: user.concernedCounts
+    }
+    const res = await disLikePerson(params);
+    if ((res as RESPONSE_INFO).status === 200) {
+      message.info((res as RESPONSE_INFO).msg);
+      getUserDetail(userId);
+    }
+  }
+
+  // 关注
+  const likeIt = async (item: {
+    id: number,
+    username: string,
+    avatar_url: string,
+    introduce: string
+  }) => {
+    const params = {
+      user_id: userId,
+      likeUserId: item.id,
+      concernCounts: user.concernedCounts
+    }
+    const res = await likePerson(params);
+    if ((res as RESPONSE_INFO).status === 200) {
+      message.info((res as RESPONSE_INFO).msg);
+      getUserDetail(userId);
+    }
   }
 
   // 鼠标移入子评论
@@ -317,164 +369,164 @@ const MySpace = (props: IProps, ref: any) => {
                             </div>
                           </div>
                         ) : (
-                            <div className="list_content">
-                              {
-                                dynamicList.map((item: any) => {
-                                  return (
-                                    <div
-                                      onMouseOver={() => showDelete(item.id)}
-                                      onMouseOut={() => hideDelete(item.id)}
-                                      className="list_item"
-                                      key={item.id}>
-                                      <a href={`/#/user/home?id=${item.user_id}`} className="avatar">
-                                        <img onDragStart={(e) => refuse(e)} src={item.avatar_url} alt="头像" />
-                                      </a>
-                                      <div className="list_item_content">
-                                        <div className="comment_list_item_username"><a href={`/#/user/home?id=${item.user_id}`} className="username">{item.username}</a> 分享单曲</div>
-                                        <div className="comment_list_item_speak word_wrap">
-                                          {item.content}
+                          <div className="list_content">
+                            {
+                              dynamicList.map((item: any) => {
+                                return (
+                                  <div
+                                    onMouseOver={() => showDelete(item.id)}
+                                    onMouseOut={() => hideDelete(item.id)}
+                                    className="list_item"
+                                    key={item.id}>
+                                    <a href={`/#/user/home?id=${item.user_id}`} className="avatar">
+                                      <img onDragStart={(e) => refuse(e)} src={item.avatar_url} alt="头像" />
+                                    </a>
+                                    <div className="list_item_content">
+                                      <div className="comment_list_item_username"><a href={`/#/user/home?id=${item.user_id}`} className="username">{item.username}</a> 分享单曲</div>
+                                      <div className="comment_list_item_speak word_wrap">
+                                        {item.content}
+                                      </div>
+                                      <div className="share_music">
+                                        <div
+                                          className="left_img">
+                                          <img
+                                            onDragStart={(e) => refuse(e)}
+                                            onClick={() => playMusic(obj, item.song)}
+                                            src={require('../../assets/images/play_music.png').default} alt="播放" />
                                         </div>
-                                        <div className="share_music">
+                                        <div className="right_info">
+                                          <a href={`/#/songdetail?id=${item.song.id}`} className="name">{item.song.song_name}</a>
+                                          <div className="singer">{item.song.song_singer}</div>
+                                        </div>
+                                      </div>
+                                      <div className="item_operator">
+                                        <div className="time">{item.add_time}</div>
+                                        <div className="operator">
                                           <div
-                                            className="left_img">
-                                            <img
-                                              onDragStart={(e) => refuse(e)}
-                                              onClick={() => playMusic(obj, item.song)}
-                                              src={require('../../assets/images/play_music.png').default} alt="播放" />
-                                          </div>
-                                          <div className="right_info">
-                                            <a href={`/#/songdetail?id=${item.song.id}`} className="name">{item.song.song_name}</a>
-                                            <div className="singer">{item.song.song_singer}</div>
-                                          </div>
-                                        </div>
-                                        <div className="item_operator">
-                                          <div className="time">{item.add_time}</div>
-                                          <div className="operator">
+                                            onClick={() => deleteParent(item)}
+                                            style={{ display: `${checkUserComment(userInfo, item.user_id) && parentHoverId === item.id ? 'block' : 'none'}` }}
+                                            className="delete">删除</div>
+                                          <span
+                                            style={{ display: `${checkUserComment(userInfo, item.user_id) && parentHoverId === item.id ? 'block' : 'none'}` }}
+                                            className="divide">|</span>
+                                          <div className="good">
                                             <div
-                                              onClick={() => deleteParent(item)}
-                                              style={{ display: `${checkUserComment(userInfo, item.user_id) && parentHoverId === item.id ? 'block' : 'none'}` }}
-                                              className="delete">删除</div>
-                                            <span
-                                              style={{ display: `${checkUserComment(userInfo, item.user_id) && parentHoverId === item.id ? 'block' : 'none'}` }}
-                                              className="divide">|</span>
-                                            <div className="good">
-                                              <div
-                                                onClick={() => cancelParentGood(item)}
-                                                style={{ display: `${checkUserGood(userInfo, item.likePersons) ? 'inline-block' : 'none'}` }}
-                                                className="good_img">
-                                                <Tooltip title="取消点赞">
-                                                  <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/good.png').default} alt="取消点赞" />
-                                                </Tooltip>
-                                              </div>
-                                              <div
-                                                onClick={() => goodToParentPerson(item)}
-                                                style={{ display: `${checkUserGood(userInfo, item.likePersons) ? 'none' : 'inline-block'}` }}
-                                                className="disgood_img">
-                                                <Tooltip title="点赞">
-                                                  <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/disgood.png').default} alt="点赞" />
-                                                </Tooltip>
-                                              </div>
-                                              <span className="good_counts">
-                                                &nbsp;&nbsp;
-                                          {
-                                                  item.likeCounts === 0 ? "" : `(${item.likeCounts})`
-                                                }
-                                              </span>
+                                              onClick={() => cancelParentGood(item)}
+                                              style={{ display: `${checkUserGood(userInfo, item.likePersons) ? 'inline-block' : 'none'}` }}
+                                              className="good_img">
+                                              <Tooltip title="取消点赞">
+                                                <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/good.png').default} alt="取消点赞" />
+                                              </Tooltip>
                                             </div>
-                                            <span>|</span>
-                                            <div className="rely" onClick={() => relyTo({
-                                              id: item.id,
-                                              parentId: item.id,
-                                              relyPerson: item.username
-                                            })}>评论</div>
-                                          </div>
-                                        </div>
-                                        <div className="child_list">
+                                            <div
+                                              onClick={() => goodToParentPerson(item)}
+                                              style={{ display: `${checkUserGood(userInfo, item.likePersons) ? 'none' : 'inline-block'}` }}
+                                              className="disgood_img">
+                                              <Tooltip title="点赞">
+                                                <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/disgood.png').default} alt="点赞" />
+                                              </Tooltip>
+                                            </div>
+                                            <span className="good_counts">
+                                              &nbsp;&nbsp;
                                           {
-                                            item.children.length > 0 && item.children.map((child: any, index: number) => {
-                                              return (
-                                                <div
-                                                  onMouseOver={(e) => showChildDelete(e, child.childId)}
-                                                  onMouseOut={(e) => hideChildDelete(e)}
-                                                  key={child.childId}
-                                                  className="comment_child_item">
-                                                  <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_avatar">
-                                                    <img onDragStart={(e) => refuse(e)} src={child.childAvatarUrl} alt="头像" />
-                                                  </a>
-                                                  <div className="comment_child_item_content">
-                                                    <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_username">{child.childUsername}</a>&emsp;
+                                                item.likeCounts === 0 ? "" : `(${item.likeCounts})`
+                                              }
+                                            </span>
+                                          </div>
+                                          <span>|</span>
+                                          <div className="rely" onClick={() => relyTo({
+                                            id: item.id,
+                                            parentId: item.id,
+                                            relyPerson: item.username
+                                          })}>评论</div>
+                                        </div>
+                                      </div>
+                                      <div className="child_list">
+                                        {
+                                          item.children.length > 0 && item.children.map((child: any, index: number) => {
+                                            return (
+                                              <div
+                                                onMouseOver={(e) => showChildDelete(e, child.childId)}
+                                                onMouseOut={(e) => hideChildDelete(e)}
+                                                key={child.childId}
+                                                className="comment_child_item">
+                                                <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_avatar">
+                                                  <img onDragStart={(e) => refuse(e)} src={child.childAvatarUrl} alt="头像" />
+                                                </a>
+                                                <div className="comment_child_item_content">
+                                                  <a href={`/#/user/home?id=${child.childUserId}`} className="comment_child_item_username">{child.childUsername}</a>&emsp;
                                             <span>回复</span>&emsp;
                                             <span className="comment_child_item_username">@{child.relyPerson}</span>
-                                                    <div className="comment_child_item_speak word_wrap">
-                                                      {child.childContent}
-                                                    </div>
-                                                    <div className="comment_child_item_operator">
-                                                      <div className="time">{child.childAddTime}</div>
-                                                      <div className="operator">
+                                                  <div className="comment_child_item_speak word_wrap">
+                                                    {child.childContent}
+                                                  </div>
+                                                  <div className="comment_child_item_operator">
+                                                    <div className="time">{child.childAddTime}</div>
+                                                    <div className="operator">
+                                                      <div
+                                                        onClick={() => deleteChild(child)}
+                                                        style={{ display: `${checkUserComment(userInfo, child.childUserId) && childHoverId === child.childId ? 'block' : 'none'}` }}
+                                                        className="delete"
+                                                      >删除</div>
+                                                      <span
+                                                        style={{ display: `${checkUserComment(userInfo, child.childUserId) && childHoverId === child.childId ? 'block' : 'none'}` }}
+                                                        className="divide">|</span>
+                                                      <div className="good">
                                                         <div
-                                                          onClick={() => deleteChild(child)}
-                                                          style={{ display: `${checkUserComment(userInfo, child.childUserId) && childHoverId === child.childId ? 'block' : 'none'}` }}
-                                                          className="delete"
-                                                        >删除</div>
-                                                        <span
-                                                          style={{ display: `${checkUserComment(userInfo, child.childUserId) && childHoverId === child.childId ? 'block' : 'none'}` }}
-                                                          className="divide">|</span>
-                                                        <div className="good">
-                                                          <div
-                                                            onClick={() => cancelChildGood(child)}
-                                                            style={{ display: `${checkUserGood(userInfo, child.likePersons) ? 'inline-block' : 'none'}` }}
-                                                            className="good_img">
-                                                            <Tooltip title="取消点赞">
-                                                              <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/good.png').default} alt="取消点赞" />
-                                                            </Tooltip>
-                                                          </div>
-                                                          <div
-                                                            onClick={() => goodToChildPerson(child)}
-                                                            style={{ display: `${checkUserGood(userInfo, child.likePersons) ? 'none' : 'inline-block'}` }}
-                                                            className="disgood_img">
-                                                            <Tooltip title="点赞">
-                                                              <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/disgood.png').default} alt="点赞" />
-                                                            </Tooltip>
-                                                          </div>
-                                                          <span className="good_counts">
-                                                            &nbsp;&nbsp;
-                                                      {
-                                                              child.childLikeCounts === 0 ? '' : `(${child.childLikeCounts})`
-                                                            }
-                                                          </span>
+                                                          onClick={() => cancelChildGood(child)}
+                                                          style={{ display: `${checkUserGood(userInfo, child.likePersons) ? 'inline-block' : 'none'}` }}
+                                                          className="good_img">
+                                                          <Tooltip title="取消点赞">
+                                                            <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/good.png').default} alt="取消点赞" />
+                                                          </Tooltip>
                                                         </div>
-                                                        <span>|</span>
-                                                        <div className="rely" onClick={() => relyTo({
-                                                          id: child.childId,
-                                                          parentId: item.id,
-                                                          relyPerson: child.childUsername
-                                                        })}>回复</div>
+                                                        <div
+                                                          onClick={() => goodToChildPerson(child)}
+                                                          style={{ display: `${checkUserGood(userInfo, child.likePersons) ? 'none' : 'inline-block'}` }}
+                                                          className="disgood_img">
+                                                          <Tooltip title="点赞">
+                                                            <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/disgood.png').default} alt="点赞" />
+                                                          </Tooltip>
+                                                        </div>
+                                                        <span className="good_counts">
+                                                          &nbsp;&nbsp;
+                                                      {
+                                                            child.childLikeCounts === 0 ? '' : `(${child.childLikeCounts})`
+                                                          }
+                                                        </span>
                                                       </div>
+                                                      <span>|</span>
+                                                      <div className="rely" onClick={() => relyTo({
+                                                        id: child.childId,
+                                                        parentId: item.id,
+                                                        relyPerson: child.childUsername
+                                                      })}>回复</div>
                                                     </div>
                                                   </div>
                                                 </div>
-                                              )
-                                            })
-                                          }
-                                        </div>
-                                        <div style={{ display: `${showId === item.id ? 'block' : 'none'}` }} className="item_comment">
-                                          <Comment
-                                            buttonText="回 复"
-                                            relyTo={relyToInfo}
-                                            song_id={userId}
-                                            getList={getList}
-                                            avatarSize={50}
-                                            isShowHeader={false}
-                                            type="dynamic"
-                                          />
-                                        </div>
+                                              </div>
+                                            )
+                                          })
+                                        }
+                                      </div>
+                                      <div style={{ display: `${showId === item.id ? 'block' : 'none'}` }} className="item_comment">
+                                        <Comment
+                                          buttonText="回 复"
+                                          relyTo={relyToInfo}
+                                          song_id={userId}
+                                          getList={getList}
+                                          avatarSize={50}
+                                          isShowHeader={false}
+                                          type="dynamic"
+                                        />
                                       </div>
                                     </div>
-                                  )
-                                })
-                              }
-                            </div>
-                          )
+                                  </div>
+                                )
+                              })
+                            }
+                          </div>
+                        )
                       }
                     </div>
                     <ShareMusic
@@ -492,12 +544,12 @@ const MySpace = (props: IProps, ref: any) => {
                         <div className="person_info">
                           <a href={`/#/user/home?id=${user.id}`} className="info_left">
                             <div className="avatar_img">
-                              <img onDragStart={(e) => refuse(e)} src={user.avatar_url} alt="头像"/>
+                              <img onDragStart={(e) => refuse(e)} src={user.avatar_url} alt="头像" />
                             </div>
                           </a>
                           <div className="info_right">
                             <div className="name">{user.username}</div>
-                            <div className="introduce word_wrap">个人介绍：{ user.introduce || "暂无" }。</div>
+                            <div className="introduce word_wrap">个人介绍：{user.introduce || "暂无"}。</div>
                           </div>
                         </div>
                         <div className="person_counts">
@@ -518,7 +570,51 @@ const MySpace = (props: IProps, ref: any) => {
                         </div>
                       </div>
                     </div>
-                    <div className="bottom"></div>
+                    <div className="bottom">
+                      <div className="fans_header">
+                        我的粉丝
+                      </div>
+                      {
+                        fansList.length === 0 ? (
+                          <div className="no_fans">
+                            暂无粉丝
+                          </div>
+                        ) : (
+                          <div className="fans_content">
+                            {
+                              fansList.map((item: {
+                                id: number,
+                                username: string,
+                                avatar_url: string,
+                                introduce: string
+                              }) => (
+                                <div key={item.id} className="fans_item">
+                                  <a href={`/#/user/home?id=${item.id}`} className="fans_left">
+                                    <img src={item.avatar_url} alt={item.username} />
+                                  </a>
+                                  <div className="fans_middle">
+                                    <a href={`/#/user/home?id=${item.id}`} className="username">{item.username}</a>
+                                    <a className="introduce text_hidden">介绍：{item.introduce || '暂无'}</a>
+                                  </div>
+                                  {
+                                    (user.concernPerson as number[]).includes(item.id) ? (
+                                      <div className="fans_right">
+                                        <Button onClick={() => disLikeIt(item)} type="primary" size="small" danger>取消关注</Button>
+                                      </div>
+                                    ) : (
+                                      <div className="fans_right">
+                                        <Button onClick={() => likeIt(item)} type="primary" size="small">关注用户</Button>
+                                      </div>
+                                    )
+                                  }
+
+                                </div>
+                              ))
+                            }
+                          </div>
+                        )
+                      }
+                    </div>
                   </div>
                 </div>
             }

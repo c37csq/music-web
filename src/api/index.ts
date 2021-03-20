@@ -94,8 +94,14 @@ export const getUserInfo = (params: { user_id: number }) => ajax(BASE + '/getUse
 // 关注用户
 export const likePerson = (params: { user_id: number, likeUserId: number, concernCounts: number }) => ajax(BASE + '/likePerson', params, 'POST');
 
-// 关注用户
+// 取消关注用户
 export const disLikePerson = (params: { user_id: number, likeUserId: number, concernCounts: number }) => ajax(BASE + '/disLikePerson', params, 'POST');
 
 // 关注用户
 export const getConcernList = (params: { idArrs: number[] }) => ajax(BASE + '/getConcernList', params, 'POST');
+
+// 关注用户详细列表
+export const getConcernDetailList = (params: { idArrs: number[] }) => ajax(BASE + '/getConcernDetailList', params, 'POST');
+
+// 获取粉丝列表
+export const getFans = (params: { idArrs: number[] }) => ajax(BASE + '/getFans', params, 'POST');

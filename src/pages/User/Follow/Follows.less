@@ -1,0 +1,101 @@
+.follow_page {
+  width: 100%;
+  margin-top: 50px;
+  .follow_header {
+    width: 100%;
+    border-bottom: 2px solid #C20C0C;
+    .header_title {
+      height: 35px;
+      line-height: 35px;
+      font-size: 20px;
+      color: #333333;
+      font-weight: 400;
+    }
+  }
+  .no_follow {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    color: #503f3f;
+    font-size: 18px;
+  }
+  .follow_content {
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    min-height: 200px;
+    width: 100%;
+    .follow_item {
+      float: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 50%;
+      height: 100px;
+      padding: 20px 20px 0 20px;
+      border-right: 1px solid #cccccc;
+      border-bottom: 1px solid #cccccc;
+      .follow_left {
+        width: 60px;
+        height: 60px;
+        img {
+          width: 60px;
+          height: 60px;
+        }
+      }
+      .follow_middle {
+        height: 60px;
+        width: 255px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        a {
+          margin-bottom: 0;
+          font-size: 12px;
+          line-height: 14px;
+        }
+        .username {
+          font-size: 14px;
+          font-weight: 600;
+        }
+        .username:hover {
+          text-decoration: underline;
+        }
+        .info {
+          margin-bottom: 0;
+          .type {
+            color: #333333;
+          }
+          .type:hover {
+            text-decoration: underline;
+          }
+          span {
+            color: #0c73c2;
+          }
+        }
+        .introduce {
+          margin-bottom: 0;
+          font-size: 12px;
+          line-height: 14px;
+          color: #333333;
+          width: 255px;
+        }
+      }
+      .follow_right {
+        font-size: 13px;
+        font-weight: 500;
+        color: #999;
+      }
+    }
+    .follow_item:nth-of-type(2n) {
+      border-right: none;
+    }
+    .follow_item:nth-of-type(n + 3) {
+      background-color: #fafafa;
+    }
+  }
+}

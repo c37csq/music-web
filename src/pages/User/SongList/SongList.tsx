@@ -33,6 +33,8 @@ const SongList = (props: IProps, ref: any) => {
   // 页码
   const [pageNum, setPageNum] = useState(1);
 
+  const [pageSaveNum, setPageSaveNum] = useState(1);
+
   const [operationId, setOperationId] = useState(0);
 
   const [songList, setSongList] = useState([]);
@@ -65,6 +67,7 @@ const SongList = (props: IProps, ref: any) => {
   }, [status]);
 
   useEffect(() => {
+    // other code
     // 取消订阅
     const cancelSub = store.subscribe(() => {
       const currentMusic = store.getState().currentMusic;
@@ -73,6 +76,7 @@ const SongList = (props: IProps, ref: any) => {
     return () => {
       cancelSub();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 获取我推荐歌曲列表
@@ -247,6 +251,12 @@ const SongList = (props: IProps, ref: any) => {
     setPageNum(current);
   }
 
+  // 翻页事件
+  const pageSaveChange = async (e: any) => {
+    const { current } = e;
+    setPageSaveNum(current);
+  }
+
   // 改变列表状态
   const changeStatus = async (e: any) => {
     setStatus(e.target.value);
@@ -386,7 +396,7 @@ const SongList = (props: IProps, ref: any) => {
             total: saveList.length,
             pageSize: 10,
             showSizeChanger: false,
-            current: pageNum,
+            current: pageSaveNum,
             size: 'small',
             itemRender: itemRender
           }}
@@ -399,7 +409,7 @@ const SongList = (props: IProps, ref: any) => {
           }}
           rowKey="id"
           dataSource={saveList}
-          onChange={pageChange}
+          onChange={pageSaveChange}
         />
       </div>
     </div>
