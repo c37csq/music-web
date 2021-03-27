@@ -60,13 +60,16 @@ const MySpace = (props: IProps, ref: any) => {
   const userInfo = store.getState().userInfo;
 
   useEffect(() => {
+    // other code
     if (userId && userId > 0) {
       getList(userId);
       getUserDetail(userId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   useEffect(() => {
+    // other code
     // 取消订阅
     // 监听store中的数据
     const cancelSub = store.subscribe(() => {
@@ -77,6 +80,7 @@ const MySpace = (props: IProps, ref: any) => {
     return () => {
       cancelSub();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 请求动态列表数据
@@ -594,7 +598,7 @@ const MySpace = (props: IProps, ref: any) => {
                                   </a>
                                   <div className="fans_middle">
                                     <a href={`/#/user/home?id=${item.id}`} className="username">{item.username}</a>
-                                    <a className="introduce text_hidden">介绍：{item.introduce || '暂无'}</a>
+                                    <p className="introduce text_hidden">介绍：{item.introduce || '暂无'}</p>
                                   </div>
                                   {
                                     (user.concernPerson as number[]).includes(item.id) ? (

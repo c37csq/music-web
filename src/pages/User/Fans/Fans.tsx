@@ -163,7 +163,28 @@ const Fans = (props: IProps, ref: any) => {
                     <img src={item.avatar_url} alt={item.username} />
                   </a>
                   <div className="fans_middle">
-                    <a href={`/#/user/home?id=${item.id}`} className="username">{item.username}</a>
+                    <a href={`/#/user/home?id=${item.id}`} className="username">
+                      {item.username}
+                      {
+                        !(item.sex) ? (
+                          ""
+                        ) : (
+                          <>
+                            {
+                              item.sex === 'female' ? (
+                                <div style={{ display: 'inline-block', width: '15px', height: '15px', marginLeft: '8px' }}>
+                                  <img width="15" height="15" src={require('../../../assets/images/female.png').default} alt="女" />
+                                </div>
+                              ) : (
+                                <div style={{ display: 'inline-block', width: '15px', height: '15px', marginLeft: '8px' }}>
+                                  <img width="15" height="15" src={require('../../../assets/images/male.png').default} alt="男" />
+                                </div>
+                              )
+                            }
+                          </>
+                        )
+                      }
+                    </a>
                     <p className="info">
                       <a href={`/#/user/dynamic?id=${item.id}`} className="type">动态<span>{item.dynamicCounts}</span></a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href={`/#/user/follows?id=${item.id}`} className="type">关注<span>{item.likeCounts}</span></a> &nbsp;&nbsp;|&nbsp;&nbsp; <a href={`/#/user/fans?id=${item.id}`} className="type">粉丝<span>{item.concernedCounts}</span></a>
                     </p>

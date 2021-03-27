@@ -44,6 +44,9 @@ const SongList = (props: IProps, ref: any) => {
   // 状态 最新/最热
   const [status, setStatus] = useState('hot');
 
+  // 收藏歌曲 状态 最新/最热
+  const [saveStatus, setSaveStatus] = useState('hot');
+
   const [shareVisible, setShareVisible] = useState(false);
 
   const currentSong = store.getState().currentMusic;
@@ -58,13 +61,13 @@ const SongList = (props: IProps, ref: any) => {
       user_id: urlId
     });
     getSaveList({
-      status,
+      status: saveStatus,
       typeId: 0,
       user_id: urlId,
       type: 'save'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, saveStatus]);
 
   useEffect(() => {
     // other code
@@ -138,7 +141,7 @@ const SongList = (props: IProps, ref: any) => {
         message.info('收藏成功！');
         // 刷新收藏歌曲列表
         getSaveList({
-          status,
+          status: saveStatus,
           typeId: 0,
           user_id: urlId,
           type: 'save'
@@ -262,6 +265,11 @@ const SongList = (props: IProps, ref: any) => {
     setStatus(e.target.value);
   }
 
+  // 改变收藏状态
+  const changeSaveStatus = async (e: any) => {
+    setSaveStatus(e.target.value);
+  }
+
   // 表格的行列
   const columns = [
     {
@@ -383,7 +391,7 @@ const SongList = (props: IProps, ref: any) => {
           <span className="table_count">共 {saveList.length} 首歌</span>
         </div>
         <div>
-          <Radio.Group onChange={changeStatus} defaultValue={status} buttonStyle="solid">
+          <Radio.Group onChange={changeSaveStatus} defaultValue={saveStatus} buttonStyle="solid">
             <Radio.Button value="hot">最热</Radio.Button>
             <Radio.Button value="new">最新</Radio.Button>
           </Radio.Group>
