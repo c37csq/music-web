@@ -57,3 +57,18 @@ export function resetScroll () {
     document.body.scrollTop = 0;
   }
 }
+
+//绑定事件
+export function addEvent (elem: any, type: string, handler: Function) {
+  if (elem.addEventListener) {
+    elem.addEventListener(type, handler, false)
+  } else if (elem.attachEvent) {
+    elem['temp' + type + handler] = handler
+    elem['temp' + type] = function () {
+      handler.call(elem)
+    }
+    elem.attachEvent('on' + type, elem['temp' + type])
+  } else {
+    elem['on' + type] = handler
+  }
+}

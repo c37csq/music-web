@@ -63,6 +63,8 @@ class LoginForm extends React.Component<IProps, {}> {
         userInfo
       });
       store.dispatch(action);
+    } else {
+      message.error((result as LOGIN_INFO).msg);
     }
   }
 
@@ -80,7 +82,7 @@ class LoginForm extends React.Component<IProps, {}> {
             rules={
               [
                 { required: true, message: '请输入用户名' },
-                { min: 6, max: 10, message: '用户名长度要在1到10之间' }
+                { min: 6, max: 10, message: '用户名长度要在6到10之间' }
               ]
             }
           >

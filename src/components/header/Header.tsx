@@ -7,6 +7,9 @@ import store from '../../store/index';
 import { changeRoute } from '../../store/actionCreators';
 import Login from '../Login/Login';
 import FloatAvatar from '../FloatAvatar/FloatAvatar';
+import { SONG } from '../../global';
+import { getSongsByLike } from '../../api';
+import Float from '../Float/Float';
 
 interface HeaderProps extends RouteComponentProps {
   hideMusicListAndVolume: (event: any) => void
@@ -22,7 +25,10 @@ interface HeaderState {
   visible: boolean,
   token: string,
   avatar_url: string,
-  route: string
+  route: string,
+  likeList: Array<SONG>,
+  value: string,
+  focus: boolean
 }
 
 
@@ -63,7 +69,10 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     visible: false,
     token: store.getState().token,
     avatar_url: store.getState().userInfo.avatar_url,
-    route: store.getState().route
+    route: store.getState().route,
+    likeList: [],
+    value: '',
+    focus: false
   }
 
   // 点击菜单
@@ -117,6 +126,37 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     }
   }
 
+  // 跳转路由
+  jumpRouter = (route: string) => {
+    this.props.history.replace(route);
+  }
+
+  // 搜索回调
+  search = (e: any) => {
+    e.persist();
+    this.setState({
+      focus: true
+    })
+    this.getList(e.target.value)
+  }
+
+  // 获取搜索列表
+  getList = async (val: string) => {
+    if (val === "") {
+      this.setState({
+        likeList: []
+      })
+      return;
+    }
+    const res = await getSongsByLike({
+      like: val
+    })
+    this.setState({
+      likeList: (res as any).result,
+      value: val
+    })
+  }
+
   componentDidMount() {
     // 监听路由改变
     this.props.history.listen(route => {
@@ -126,7 +166,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
   }
 
   public render() {
-    let { menuList, visible, token, avatar_url, route } = this.state;
+    let { menuList, visible, token, avatar_url, route, focus, likeList, value } = this.state;
     const { hideMusicListAndVolume } = this.props;
     return (
       <header onClick={hideMusicListAndVolume} className="Header_Container">
@@ -148,18 +188,22 @@ class Header extends React.Component<HeaderProps, HeaderState> {
               token ? (
                 <div style={{ cursor: 'pointer', position: 'relative' }}>
                   <Avatar src={avatar_url} size={50} />
-                  <FloatAvatar handleMenuClick={this.handleMenuClick} ref={this.avatarFloat} />
+                  <FloatAvatar jumpRouter={this.jumpRouter} handleMenuClick={this.handleMenuClick} ref={this.avatarFloat} />
                 </div>
               ) : (
-                  <div className="login_button" onClick={this.showModal}>
-                    <p>登录</p>
-                  </div>
-                )
+                <div className="login_button" onClick={this.showModal}>
+                  <p>登录</p>
+                </div>
+              )
             }
           </div>
           <div className="Header_Input_Wrapper">
             <div>
-              <Input placeholder="请输入音乐" prefix={<SearchOutlined />} />
+              <Input onChange={this.search} placeholder="请输入音乐" prefix={<SearchOutlined />} />
+              <Float
+                focus={focus}
+                likeList={likeList}
+                value={value} />
             </div>
           </div>
           <Login closeModal={this.closeModal} visible={visible} />

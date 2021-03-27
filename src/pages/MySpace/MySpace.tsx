@@ -361,7 +361,7 @@ const MySpace = (props: IProps, ref: any) => {
                     </div>
                     <div className="list">
                       {
-                        dynamicList.length === 0 ? (
+                        (dynamicList || []).length === 0 ? (
                           <div className="no_dynamic">
                             <div className="no_dynamic_img">
                               <img onDragStart={(e) => refuse(e)} src={require('../../assets/images/no_data.png').default} alt="暂无动态" />

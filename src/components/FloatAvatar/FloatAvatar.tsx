@@ -8,7 +8,8 @@ interface IState {
 }
 
 interface IProps {
-  handleMenuClick: Function
+  handleMenuClick: Function,
+  jumpRouter: Function
 }
 
 
@@ -34,12 +35,15 @@ class FloatAvatar extends React.Component<IProps, IState> {
 
   // 实施操作
   doOperator = (index: number) => {
+    const { id } = store.getState().userInfo;
     switch(index) {
       case 0:
         // 点击我的主页
+        this.props.jumpRouter(`/user/home?id=${id}`);
         break;
       case 1:
         // 点击个人设置
+        this.props.jumpRouter(`/update?id=${id}`);
         break;
       case 2:
         // 点击退出操作

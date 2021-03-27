@@ -105,3 +105,9 @@ export const getConcernDetailList = (params: { idArrs: number[] }) => ajax(BASE 
 
 // 获取粉丝列表
 export const getFans = (params: { idArrs: number[] }) => ajax(BASE + '/getFans', params, 'POST');
+
+// 关注用户详细列表
+export const getFansDetailList = (params: { idArrs: number[] }) => ajax(BASE + '/getFansDetailList', params, 'POST');
+
+// 修改用户信息
+export const updateUserInfo = (params: { id:number, username: string, introduce: string, sex: string, age: string | number }) => ajax(BASE + '/updateUserInfo', params, 'POST');

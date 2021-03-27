@@ -48,6 +48,7 @@ const User = (props: IProps, ref: any) => {
   }, [urlId])
 
   useEffect(() => {
+    // other code
     // 监听路由改变
     props.history.listen(route => {
       const newId = parseInt(route.search.split('=')[1]);
@@ -59,6 +60,7 @@ const User = (props: IProps, ref: any) => {
     return () => {
       setFlag(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // 获取用户信息
@@ -123,6 +125,11 @@ const User = (props: IProps, ref: any) => {
     }
   }
 
+  // 编辑个人资料
+  const update = () => {
+    props.history.push(`/update?id=${urlId}`);
+  }
+
   return (
     <div className="User_Container">
       <div className="User_Content_Wrapper">
@@ -150,7 +157,7 @@ const User = (props: IProps, ref: any) => {
                   }
                 </div>
                 <div style={{ display: `${checkUser() ? 'inline-block' : 'none'}` }} className="header_right">
-                  <Button>编辑个人资料</Button>
+                  <Button onClick={update}>编辑个人资料</Button>
                 </div>
                 {
                   checkUserIsConcern() ? (

@@ -34,7 +34,7 @@ class UploadAvatar extends React.Component<{}, IState> {
       file.preview = await getBase64(file.originFileObj);
     }
     this.setState({
-      previewImage: `${BASE_IMG}${file.url}`|| file.preview,
+      previewImage: `${BASE_IMG}${file.url}` || file.preview,
       previewVisible: true,
     });
   }
@@ -89,7 +89,7 @@ class UploadAvatar extends React.Component<{}, IState> {
     // 定义上传的按钮
     const uploadButton = (
       <div>
-        { loading ? <LoadingOutlined /> : <PlusOutlined /> }
+        { loading ? <LoadingOutlined /> : <PlusOutlined />}
         <div className="ant-upload-text">上传头像</div>
       </div>
     );
@@ -114,8 +114,8 @@ class UploadAvatar extends React.Component<{}, IState> {
           </Upload>
         </ImgCrop>
         <Modal
-          closeIcon={<CloseOutlined style={{color: '#ffffff'}}/>}
-          visible={previewVisible} 
+          closeIcon={<CloseOutlined style={{ color: '#ffffff' }} />}
+          visible={previewVisible}
           footer={null} onCancel={this.handleCancel}>
           <img alt="你上传的图片" style={{ width: '100%' }} src={previewImage} />
         </Modal>

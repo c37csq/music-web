@@ -178,7 +178,6 @@ const Follows = (props: IProps, ref: any) => {
           </div>
         )
       }
-
     </div>
   )
 }

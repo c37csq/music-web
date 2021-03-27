@@ -286,7 +286,7 @@ const SongDetail = (props: IProps, ref: any) => {
                                     <div className="play" onClick={() => playMusic(obj, item)}>
                                       <img src={require('../../assets/images/same_play.png').default} alt="播放" />
                                     </div>
-                                    <div className="add" onClick={() => addMusic(song_detail)}>
+                                    <div className="add" onClick={() => addMusic(item)}>
                                       <img src={require('../../assets/images/same_add.png').default} alt="添加" />
                                     </div>
                                   </div>

@@ -14,6 +14,7 @@ import Player from '../../components/Player/Player';
 import './Default.less';
 import SongDetail from '../SongDetail/SongDetail';
 import User from '../User/User';
+import Update from '../Update/Update';
 
 const { Content } = Layout;
 
@@ -114,6 +115,7 @@ class Default extends React.Component<{}, {}> {
                   <Route path="/myspace" component={MySpace} />
                   <Route path="/songdetail" component={SongDetail} />
                   <Route path="/user" component={User} />
+                  <Route path="/update" component={Update} />
                   <Route component={NoFoundPage} />
                 </Switch>
               </div>
