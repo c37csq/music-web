@@ -42,7 +42,7 @@ class LoginForm extends React.Component<IProps, {}> {
       const token = (result as LOGIN_INFO).token;
 
       // userInfo
-      const userInfo = (result as LOGIN_INFO).data
+      const userInfo = (result as LOGIN_INFO).data;
 
       // 将token储存到sessionStorage
       sessionStorage.setItem('token', token);

@@ -10,11 +10,13 @@ interface IProps {
 class ModalDrag extends React.Component<IProps, {}> {
 
   updateTransform = (transformStr: any) => {
-    (this as any).modalDom.style.transform = transformStr;
+    for (let i = 0; i < (this as any).modalDom.length; i +=1) {
+      ((this as any).modalDom)[i].style.transform = transformStr;
+    }
   };
 
   componentDidMount() {
-    (this as any).modalDom = document.getElementsByClassName("ant-modal-wrap")[0];
+    (this as any).modalDom = document.getElementsByClassName("ant-modal-content");
   }
 
   render() {
