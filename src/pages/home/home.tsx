@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getSongTypes, getSongs, addHot, downSong, saveMusic } from '../../api/index';
+import { getSongTypes, getSongs, addHot, downSong, saveMusic, getUserInfo } from '../../api/index';
 import SongType from '../../components/SongType/SongType';
 import SongTable from '../../components/SongTable/SongTable';
 import './home.less';
@@ -26,6 +26,17 @@ interface IState {
     song_singer: string,
     song_url: string,
     song_hot: number
+  },
+  user: {
+    id: number;
+    avatar_url: string;
+    sex: string;
+    username: "";
+    dynamicCounts: number;
+    likeCounts: number;
+    concernedCounts: number;
+    introduce: string;
+    age: null
   }
 }
 
@@ -77,6 +88,17 @@ class Home extends React.Component<IProps, IState> {
       song_singer: "",
       song_url: "",
       song_hot: 0
+    },
+    user: {
+      id: -1,
+      avatar_url: "",
+      sex: "",
+      username: "",
+      dynamicCounts: 0,
+      likeCounts: 0,
+      concernedCounts: 0,
+      introduce: "",
+      age: null
     }
   }
 
@@ -84,11 +106,15 @@ class Home extends React.Component<IProps, IState> {
     // 获取歌曲分类
     const res = await getSongTypes();
 
+    const { id } = store.getState().userInfo;
+
     // 获取歌曲列表数据
     this.getSongList({
       status: 'hot',
       typeId: 0
     });
+
+    this.getUserDetail(id);
 
     this.setState({
       songTypes: (res as any).data
@@ -278,6 +304,16 @@ class Home extends React.Component<IProps, IState> {
     (this.props as any).history.push(`/songdetail?id=${record.id}`);
   }
 
+  // 获取用户信息
+  getUserDetail = async (id: number) => {
+    const res = await getUserInfo({
+      user_id: id
+    });
+    this.setState({
+      user: (res as any).data
+    })
+  }
+
   public render() {
     const { songTypes, songType, songList, currentMusic, operationId } = this.state;
     const { id } = store.getState().userInfo;
@@ -352,13 +388,14 @@ class Home extends React.Component<IProps, IState> {
           </div>
       },
     ];
-    const { visible, shareVisible, shareMusic } = this.state;
+    const { visible, shareVisible, shareMusic, user } = this.state;
 
     return (
       <div className="Home_Content_Wrapper">
         <ShareMusic
           shareMusic={shareMusic}
           userId={id}
+          user={user}
           closeModal={this.closeShareModal}
           title="发布动态"
           visible={shareVisible} />

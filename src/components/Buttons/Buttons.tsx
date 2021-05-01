@@ -1,7 +1,7 @@
 import './Buttons.less';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import store from '../../store';
-import { addHot, saveMusic, downSong } from '../../api';
+import { addHot, saveMusic, downSong, getUserInfo } from '../../api';
 import { LIKE_PERSONS_ITEM, RESPONSE_INFO, SONG } from '../../global';
 import { message } from 'antd';
 import Login from '../Login/Login';
@@ -33,6 +33,40 @@ const Buttons = (props: IProps, ref: any) => {
     song_url: "",
     song_hot: 0
   })
+
+  const { id } = store.getState().userInfo;
+
+  // 用户信息不是储存在本地的
+  const [user, setUser] = useState({
+    id: -1,
+    avatar_url: "",
+    sex: "",
+    username: "",
+    dynamicCounts: 0,
+    likeCounts: 0,
+    concernedCounts: 0,
+    introduce: "",
+    age: null,
+    fans: [],
+    concernPerson: []
+  });
+
+  useEffect(() => {
+    // other code
+    if (id && id > 0) {
+      getUserDetail(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  // 获取用户信息
+  const getUserDetail = async (id: number) => {
+    const res = await getUserInfo({
+      user_id: id
+    });
+    setUser((res as any).data);
+  }
+
 
   // 收藏歌曲
   const save = async () => {
@@ -158,7 +192,6 @@ const Buttons = (props: IProps, ref: any) => {
     setShareVisible(false);
   }
   
-  const { id } = store.getState().userInfo;
 
   return (
     <div className="buttons">
@@ -166,6 +199,7 @@ const Buttons = (props: IProps, ref: any) => {
       <ShareMusic
         shareMusic={shareCurrentMusic}
         userId={id}
+        user={user}
         closeModal={closeShareModal}
         title="分享音乐"
         visible={shareVisible} />

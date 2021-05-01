@@ -7,7 +7,7 @@ import { getTime } from '../../utils/utils';
 import { setCurrentMusic } from '../../store/actionCreators';
 import MusicList from '../../components/MusicList/MusicList';
 import Login from '../Login/Login';
-import { saveMusic } from '../../api/index';
+import { getUserInfo, saveMusic } from '../../api/index';
 import ShareMusic from '../ShareMusic/ShareMusic';
 
 interface IProps { }
@@ -74,6 +74,23 @@ const Player = (props: IProps, ref: any) => {
   // 播放总进度条
   const progressRef = useRef<HTMLDivElement>(null);
 
+  // 用户信息不是储存在本地的
+  const [user, setUser] = useState({
+    id: -1,
+    avatar_url: "",
+    sex: "",
+    username: "",
+    dynamicCounts: 0,
+    likeCounts: 0,
+    concernedCounts: 0,
+    introduce: "",
+    age: null,
+    fans: [],
+    concernPerson: []
+  });
+
+  const { id } = store.getState().userInfo;
+
   // 监听store中的数据
   store.subscribe(() => {
     const currentMusic = store.getState().currentMusic;
@@ -86,6 +103,9 @@ const Player = (props: IProps, ref: any) => {
   useEffect(() => {
     // other code
     const audio = audioRef.current;
+    if (id && id > 0) {
+      getUserDetail(id);
+    }
     // 解决音量拖动问题
     bindEvent();
     const currentMusic = store.getState().currentMusic;
@@ -638,11 +658,19 @@ const Player = (props: IProps, ref: any) => {
     setShareVisible(false);
   }
 
+  // 获取用户信息
+  const getUserDetail = async (id: number) => {
+    const res = await getUserInfo({
+      user_id: id
+    });
+    setUser((res as any).data);
+  }
+
   // 关闭弹窗
   const closeModal = () => {
     setVisible(false);
   }
-  const { id } = store.getState().userInfo;
+  
 
   const { song_url, song_singer, song_name } = currentMusic;
   return (
@@ -651,6 +679,7 @@ const Player = (props: IProps, ref: any) => {
       <ShareMusic
         shareMusic={shareMusic}
         userId={id}
+        user={user}
         closeModal={closeShareModal}
         title="分享音乐"
         visible={shareVisible} />
