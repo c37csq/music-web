@@ -193,7 +193,7 @@ const SongDetail = (props: IProps, ref: any) => {
                       <div className="content_singer">
                         歌手：
                   <Tooltip placement="topLeft" title={song_detail.song_singer}>
-                          <a className="singer text_hidden">{song_detail.song_singer}</a>
+                          <span className="singer text_hidden">{song_detail.song_singer}</span>
                         </Tooltip>
                       </div>
                       <div className="content_create">

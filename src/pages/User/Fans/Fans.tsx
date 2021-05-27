@@ -18,21 +18,6 @@ const Fans = (props: IProps, ref: any) => {
   // 粉丝列表
   const [fansList, setFansList] = useState([]);
 
-  // 用户信息不是储存在本地的
-  const [user, setUser] = useState({
-    id: -1,
-    avatar_url: "",
-    sex: "",
-    username: "",
-    dynamicCounts: 0,
-    likeCounts: 0,
-    concernedCounts: 0,
-    introduce: "",
-    age: null,
-    fans: [],
-    concernPerson: []
-  });
-
   const [flag, setFlag] = useState(false);
 
   const userInfo = store.getState().userInfo;
@@ -78,7 +63,6 @@ const Fans = (props: IProps, ref: any) => {
     const res = await getUserInfo({
       user_id: id
     });
-    setUser((res as any).data);
     getFansList((res as any).data.fans);
   }
 

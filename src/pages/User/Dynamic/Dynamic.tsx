@@ -17,8 +17,6 @@ const Dynamic = (props: IProps, ref: any) => {
   // 取到id
   const id = parseInt(search.replace(/^\?/, '').split('=')[1]);
 
-  const [userId, setUserId] = useState(id);
-
   const [dynamicList, setDynamicList] = useState([]);
 
   // 父级评论鼠标hover的项
@@ -60,9 +58,9 @@ const Dynamic = (props: IProps, ref: any) => {
 
   useEffect(() => {
     // other code
-    if (userId && userId > 0) {
-      getList(userId);
-      getUserDetail(userId);
+    if (id && id > 0) {
+      getList(id);
+      getUserDetail(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -115,8 +113,8 @@ const Dynamic = (props: IProps, ref: any) => {
     const res = await deleteDynamic(params);
     if ((res as any).status === 200) {
       message.info('删除成功！');
-      getUserDetail(userId);
-      getList(userId);
+      getUserDetail(id);
+      getList(id);
     }
   }
 
@@ -139,7 +137,7 @@ const Dynamic = (props: IProps, ref: any) => {
     const res = await deleteDynamic(params);
     if ((res as any).status === 200) {
       message.info('删除成功！');
-      getList(userId);
+      getList(id);
     }
   }
 
@@ -157,7 +155,7 @@ const Dynamic = (props: IProps, ref: any) => {
     const res = await goodToDynamic(params);
     if ((res as any).status === 200) {
       message.info('点赞成功！');
-      getList(userId);
+      getList(id);
     }
   }
 
@@ -210,7 +208,7 @@ const Dynamic = (props: IProps, ref: any) => {
     const res = await disGoodToDynamic(params);
     if ((res as any).status === 200) {
       message.info('取消点赞成功！');
-      getList(userId);
+      getList(id);
     }
   }
 
@@ -228,7 +226,7 @@ const Dynamic = (props: IProps, ref: any) => {
     const res = await goodToDynamic(params);
     if ((res as any).status === 200) {
       message.info('点赞成功！');
-      getList(userId);
+      getList(id);
     }
   }
 
@@ -256,14 +254,14 @@ const Dynamic = (props: IProps, ref: any) => {
     const res = await disGoodToDynamic(params);
     if ((res as any).status === 200) {
       message.info('取消点赞成功！');
-      getList(userId);
+      getList(id);
     }
   }
 
   // 判断是否是自己访问当前页面
   const checkUser = (): boolean => {
-    const { id } = userInfo;
-    if (id === userId) {
+    const { id: userId } = userInfo;
+    if (userId === id) {
       return true;
     }
     return false;
@@ -453,7 +451,7 @@ const Dynamic = (props: IProps, ref: any) => {
                                     <Comment
                                       buttonText="回 复"
                                       relyTo={relyToInfo}
-                                      song_id={userId}
+                                      song_id={id}
                                       getList={getList}
                                       avatarSize={50}
                                       isShowHeader={false}

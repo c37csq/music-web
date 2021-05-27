@@ -22,8 +22,6 @@ const Update = (props: IProps, ref: any) => {
 
   const [ageList, setAgeList] = useState<any[]>([]);
 
-  const [urlId, setId] = useState(id);
-
   // 用户信息不是储存在本地的
   const [user, setUser] = useState({
     id: -1,
@@ -42,7 +40,7 @@ const Update = (props: IProps, ref: any) => {
   useEffect(() => {
     // other code
     createAgeList();
-    getUserDetail(urlId);
+    getUserDetail(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -76,7 +74,7 @@ const Update = (props: IProps, ref: any) => {
   // 提交
   const onFinish = async (values: any) => {
     const params = {
-      id: urlId,
+      id: id,
       ...values
     }
     const res = await updateUserInfo(params);

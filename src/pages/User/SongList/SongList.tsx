@@ -18,8 +18,6 @@ const SongList = (props: IProps, ref: any) => {
   // 取到id
   const id = parseInt(search.replace(/^\?/, '').split('=')[1]);
 
-  const [urlId, setId] = useState(id);
-
   const [visible, setVisible] = useState(false);
 
   const [shareMusic, setShareMusic] = useState({
@@ -58,12 +56,12 @@ const SongList = (props: IProps, ref: any) => {
     getSongList({
       status,
       typeId: 0,
-      user_id: urlId
+      user_id: id
     });
     getSaveList({
       status: saveStatus,
       typeId: 0,
-      user_id: urlId,
+      user_id: id,
       type: 'save'
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,7 +141,7 @@ const SongList = (props: IProps, ref: any) => {
         getSaveList({
           status: saveStatus,
           typeId: 0,
-          user_id: urlId,
+          user_id: id,
           type: 'save'
         })
       }
